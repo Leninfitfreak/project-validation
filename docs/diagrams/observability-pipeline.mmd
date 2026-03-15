@@ -1,0 +1,7 @@
+flowchart LR
+  Services --> ClusterOTel
+  ClusterOTel --> HostOTel
+  KafkaJMX --> HostOTel
+  HostOTel --> ClickHouse
+  ClickHouse --> ObserverStack
+  ClickHouse --> DeepObserver

@@ -1,0 +1,12 @@
+flowchart LR
+  Browser --> Frontend
+  Frontend --> ProductService
+  Frontend --> OrderService
+  ProductService --> Postgres
+  ProductService --> Kafka
+  Kafka --> OrderService
+  ProductService --> OTelCollector
+  OrderService --> OTelCollector
+  OTelCollector --> ObserverStack
+  ObserverStack --> ClickHouse
+  ObserverStack --> DeepObserver

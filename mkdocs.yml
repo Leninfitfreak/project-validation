@@ -1,0 +1,18 @@
+site_name: LeninKart Validation
+site_description: Automated validation and evidence for the LeninKart platform
+theme:
+  name: material
+nav:
+  - Home: index.md
+  - System Architecture: system-architecture.md
+  - Application Workflow: application-workflow.md
+  - Test Cases: test-cases.md
+  - Validation Summary: validation-summary.md
+  - Validation Results: validation-results.md
+  - Observability Architecture: observability-architecture.md
+  - AI Observability Analysis: ai-observability-analysis.md
+  - GitOps Deployment: gitops-deployment.md
+  - Secret Management: secret-management.md
+  - Vault Secret Management: vault-secret-management.md
+  - System Evidence: system-evidence.md
+  - Screenshots: screenshots.md

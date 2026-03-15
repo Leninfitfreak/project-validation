@@ -1,0 +1,12 @@
+flowchart TD
+  subgraph Minikube
+    Ingress --> FrontendPod
+    Ingress --> ProductPod
+    Ingress --> OrderPod
+    ProductPod --> PostgresSvc
+    OrderPod --> PostgresSvc
+    ProductPod --> OTelCollector
+    OrderPod --> OTelCollector
+  end
+  OTelCollector --> HostCollector
+  HostCollector --> ClickHouse
