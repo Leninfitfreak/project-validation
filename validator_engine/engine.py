@@ -57,7 +57,7 @@ class ValidationEngine:
     def discover_architecture(self) -> dict:
         return {
             'repositories': {
-                'infra': r'C:\Projects\infra\leninkart-infra',
+                'infra': r'C:\Projects\Services\leninkart-infra',
                 'observer_stack': r'C:\Projects\Services\observer-stack',
                 'kafka_platform': r'C:\Projects\Services\kafka-platform',
                 'frontend': r'C:\Projects\Services\leninkart-frontend',

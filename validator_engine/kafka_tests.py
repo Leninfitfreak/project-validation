@@ -9,6 +9,8 @@ from validator_engine.validators import ValidationResult
 
 class KafkaTests:
     REQUIRED_TOPICS = {'product-orders', 'product-events', 'order-events', 'order-created'}
+    KAFKA_BOOTSTRAP_HOST = 'host.k3d.internal'
+    KAFKA_NETWORK = 'k3d-leninkart-dev'
 
     def __init__(self, root: Path, env: dict, model: dict, evidence, catalog) -> None:
         self.root = root
@@ -26,8 +28,8 @@ class KafkaTests:
             return {}
         return json.loads(result.stdout)
 
-    def _kafka_minikube_ip(self) -> str | None:
-        return self._docker_inspect_networks().get('minikube', {}).get('IPAddress')
+    def _kafka_k3d_ip(self) -> str | None:
+        return self._docker_inspect_networks().get(self.KAFKA_NETWORK, {}).get('IPAddress')
 
     def _business_pods(self) -> list[str]:
         pod_names = []
@@ -57,7 +59,7 @@ class KafkaTests:
             "pod_name=$(hostname); "
             "printf '# Kubernetes-managed hosts file.\\n127.0.0.1\\tlocalhost\\n::1\\tlocalhost ip6-localhost ip6-loopback\\n"
             "fe00::0\\tip6-localnet\\nfe00::0\\tip6-mcastprefix\\nfe00::1\\tip6-allnodes\\nfe00::2\\tip6-allrouters\\n"
-            "%s\\t%s\\n\\n# Entries added by HostAliases.\\n%s\\thost.minikube.internal\\n' \"$pod_ip\" \"$pod_name\" '"
+            "%s\\t%s\\n\\n# Entries added by HostAliases.\\n%s\\thost.k3d.internal\\n' \"$pod_ip\" \"$pod_name\" '"
             + host_ip
             + "' > /etc/hosts"
         )
@@ -71,12 +73,16 @@ class KafkaTests:
             repairs.append('started kafka-platform container')
 
         networks = self._docker_inspect_networks()
-        if 'minikube' not in networks:
-            subprocess.run(['docker', 'network', 'connect', 'minikube', 'kafka-platform'], capture_output=True, text=True)
-            repairs.append('connected kafka-platform container to the minikube docker network')
+        if self.KAFKA_NETWORK not in networks:
+            network_exists = subprocess.run(['docker', 'network', 'inspect', self.KAFKA_NETWORK], capture_output=True, text=True).returncode == 0
+            if network_exists:
+                subprocess.run(['docker', 'network', 'connect', self.KAFKA_NETWORK, 'kafka-platform'], capture_output=True, text=True)
+                repairs.append(f'connected kafka-platform container to {self.KAFKA_NETWORK}')
+            else:
+                repairs.append(f'k3d network {self.KAFKA_NETWORK} not present yet')
             networks = self._docker_inspect_networks()
 
-        kafka_ip = networks.get('minikube', {}).get('IPAddress')
+        kafka_ip = networks.get(self.KAFKA_NETWORK, {}).get('IPAddress')
 
         for topic in sorted(self.REQUIRED_TOPICS | {'validation-probe'}):
             self._docker(f'unset KAFKA_OPTS; kafka-topics --bootstrap-server localhost:9092 --create --if-not-exists --topic {topic} --partitions 1 --replication-factor 1 >/dev/null 2>&1 || true')
@@ -84,7 +90,7 @@ class KafkaTests:
 
         pods = self._business_pods()
         if pods:
-            if not all(self._tcp_check_from_pod(pod, 'host.minikube.internal') for pod in pods):
+            if not all(self._tcp_check_from_pod(pod, self.KAFKA_BOOTSTRAP_HOST) for pod in pods):
                 candidates = ['192.168.56.1']
                 if kafka_ip:
                     candidates.append(kafka_ip)
@@ -92,7 +98,7 @@ class KafkaTests:
                     if all(self._tcp_check_from_pod(pod, candidate) for pod in pods):
                         for pod in pods:
                             self._rewrite_pod_hosts(pod, candidate)
-                        repairs.append(f'rewrote running pod hosts entries to host.minikube.internal={candidate}')
+                        repairs.append(f'rewrote running pod hosts entries to host.k3d.internal={candidate}')
                         break
         return repairs
 
@@ -108,8 +114,9 @@ class KafkaTests:
             'topics': sorted(available),
             'probe_output': consume.stdout.strip(),
             'jmx_metrics_present': 'jmx_scrape_duration_seconds' in metrics.stdout,
-            'minikube_gateway': subprocess.run(['docker', 'inspect', 'minikube', '--format', '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}'], capture_output=True, text=True).stdout.strip() or '192.168.49.1',
-            'kafka_minikube_ip': self._kafka_minikube_ip(),
+            'k3d_gateway': subprocess.run(['docker', 'network', 'inspect', self.KAFKA_NETWORK, '--format', '{{range .IPAM.Config}}{{.Gateway}}{{end}}'], capture_output=True, text=True).stdout.strip(),
+            'kafka_k3d_ip': self._kafka_k3d_ip(),
+            'kafka_bootstrap_target': self.KAFKA_BOOTSTRAP_HOST,
         }
         success = self.REQUIRED_TOPICS.issubset(available) and probe_ok and details['jmx_metrics_present']
         self.evidence.record_result('kafka', details)

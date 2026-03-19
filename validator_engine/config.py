@@ -9,7 +9,7 @@ ROOT = Path(r"C:\Projects\Services\project-validation")
 @dataclass(frozen=True)
 class RepoPaths:
     project_validation: Path = ROOT
-    infra: Path = Path(r"C:\Projects\infra\leninkart-infra")
+    infra: Path = Path(r"C:\Projects\Services\leninkart-infra")
     observer_stack: Path = Path(r"C:\Projects\Services\observer-stack")
     kafka_platform: Path = Path(r"C:\Projects\Services\kafka-platform")
     frontend: Path = Path(r"C:\Projects\Services\leninkart-frontend")
