@@ -50,8 +50,6 @@ class SecretsLoader:
             'KUBE_NAMESPACE': 'dev',
             'INGRESS_URL': 'http://127.0.0.1/',
             'OBSERVER_STACK_URL': 'http://127.0.0.1:8080',
-            'DEEP_OBSERVER_URL': 'http://127.0.0.1:3000',
-            'DEEP_OBSERVER_API_URL': 'http://127.0.0.1:8081/health',
             'ARGOCD_URL': 'http://127.0.0.1:8085',
             'VAULT_URL': 'http://127.0.0.1:8205',
             'GRAFANA_URL': 'http://127.0.0.1:3001',

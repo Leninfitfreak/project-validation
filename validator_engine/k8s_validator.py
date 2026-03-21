@@ -21,11 +21,8 @@ class K8sValidator:
         return json.loads(result.stdout)
 
     def repair(self) -> ValidationResult:
-        repairs = []
-        for deployment in ('ai-observer', 'ai-observer-central-collector'):
-            subprocess.run(['kubectl', 'scale', 'deploy', '-n', 'dev', deployment, '--replicas=0'], capture_output=True, text=True)
-            repairs.append(f'scaled {deployment} to 0 as legacy drift quarantine')
-        return ValidationResult('k8s-repair', True, 'Applied Kubernetes repair actions', {'repairs': repairs}, repairs)
+        repairs: list[str] = []
+        return ValidationResult('k8s-repair', True, 'No Kubernetes repair actions applied', {'repairs': repairs}, repairs)
 
     def validate(self) -> ValidationResult:
         pods = self._kubectl_json(['get', 'pods', '-A'])['items']

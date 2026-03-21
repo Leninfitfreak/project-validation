@@ -10,7 +10,7 @@ from validator_engine.validators import ValidationResult
 
 
 class VaultTests:
-    EXPECTED_PATHS = {'postgres', 'product-service', 'order-service', 'kafka', 'ai-observer'}
+    EXPECTED_PATHS = {'postgres', 'product-service', 'order-service', 'kafka', 'observability', 'auth'}
 
     def __init__(self, root: Path, env: dict, model: dict, evidence, catalog) -> None:
         self.root = root

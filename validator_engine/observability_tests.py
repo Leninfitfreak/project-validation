@@ -112,12 +112,6 @@ class ObservabilityTests:
             'data_terms': ['triggered alerts', 'alert rules', 'configuration'], 'required_data': False, 'critical': False,
             'explanation': 'The alerts overview confirms that the alerting subsystem is available and exposes rules, triggered alerts, and configuration surfaces.',
         },
-        {
-            'test_id': 'OBS-011', 'slug': 'observer-ai-observer', 'path': '/ai-observer', 'title': 'Embedded AI Observer dashboard',
-            'required_texts': ['ai observer'], 'min_body_chars': 180,
-            'data_terms': ['root cause', 'topology', 'incident'], 'required_data': True, 'critical': True,
-            'explanation': 'The embedded AI Observer route connects the core observability workspace to the Deep Observer analysis experience.',
-        },
     ]
 
     def __init__(self, root: Path, env: dict, model: dict, evidence, catalog) -> None:
@@ -125,7 +119,7 @@ class ObservabilityTests:
         self.env = env
         self.model = model
         self.evidence = evidence
-        self.test_ids = catalog.require('OBS-001', 'OBS-004', 'OBS-005', 'OBS-006', 'OBS-007', 'OBS-008', 'OBS-009', 'OBS-011', 'KTEL-001', 'KTEL-004', 'UI-004')
+        self.test_ids = catalog.require('OBS-001', 'OBS-004', 'OBS-005', 'OBS-006', 'OBS-007', 'OBS-008', 'OBS-009', 'KTEL-001', 'KTEL-004', 'UI-004')
 
     def repair(self) -> list[str]:
         return []
@@ -228,17 +222,7 @@ class ObservabilityTests:
         services_ok = requests.get(self.env['OBSERVER_STACK_URL'] + '/api/v1/health', timeout=20).status_code == 200
         kafka_metrics_raw = requests.get('http://127.0.0.1:7071/metrics', timeout=20).text
         kafka_metrics = 'product-orders' in kafka_metrics_raw and 'kafka_server_brokertopicmetrics_messagesinpersec_count_total' in kafka_metrics_raw
-        topology_nodes = []
-        topology_resp = requests.get(self.env['DEEP_OBSERVER_API_URL'].replace('/health', '/api/topology'), timeout=30)
-        if topology_resp.ok:
-            topology_json = topology_resp.json()
-            topology_nodes = [node.get('label') or node.get('id') for node in topology_json.get('nodes', [])]
-        fallback_detected = {
-            'frontend': detected_services['frontend'] or 'frontend' in topology_nodes,
-            'product-service': detected_services['product-service'] or 'product-service' in topology_nodes,
-            'order-service': detected_services['order-service'] or 'order-service' in topology_nodes,
-        }
-        required_detected = fallback_detected['product-service'] and fallback_detected['order-service']
+        required_detected = detected_services['product-service'] and detected_services['order-service']
         critical_sections = [section for section in sections if section['critical']]
         critical_ok = all(section['status'] == 'ok' for section in critical_sections)
         success = services_ok and kafka_metrics and required_detected and critical_ok and len(saved) >= 10 and bool(traffic.get('orders_requested', 0) >= 20)
@@ -248,9 +232,7 @@ class ObservabilityTests:
             'observer_health': services_ok,
             'kafka_metrics': kafka_metrics,
             'detected_services': detected_services,
-            'fallback_detected_services': fallback_detected,
-            'topology_nodes': topology_nodes,
-            'frontend_service_detected': fallback_detected['frontend'],
+            'frontend_service_detected': detected_services['frontend'],
             'required_service_detection_ok': required_detected,
             'critical_sections_ok': critical_ok,
         }

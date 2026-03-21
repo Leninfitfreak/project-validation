@@ -22,8 +22,6 @@ class ObservabilityValidator:
         for name, url in {
             'frontend': self.env['INGRESS_URL'],
             'observer_stack': self.env['OBSERVER_STACK_URL'],
-            'deep_observer_api': self.env['DEEP_OBSERVER_API_URL'],
-            'deep_observer_frontend': self.env['DEEP_OBSERVER_URL'],
         }.items():
             try:
                 response = requests.get(url, timeout=20, verify=False)

@@ -22,11 +22,7 @@ class InfraTests:
         return json.loads(result.stdout)
 
     def repair(self) -> list[str]:
-        repairs = []
-        for deployment in ('ai-observer', 'ai-observer-central-collector'):
-            subprocess.run(['kubectl', 'scale', 'deploy', '-n', 'dev', deployment, '--replicas=0'], capture_output=True, text=True)
-            repairs.append(f'scaled {deployment} to 0 to quarantine legacy failing workloads')
-        return repairs
+        return []
 
     def run(self, context: dict) -> ValidationResult:
         nodes = self._json('get', 'nodes')['items']

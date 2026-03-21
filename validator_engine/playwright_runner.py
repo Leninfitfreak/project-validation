@@ -203,11 +203,4 @@ class PlaywrightRunner:
         except Exception:
             return False
 
-    def deep_observer_incidents(self) -> list[dict[str, Any]]:
-        try:
-            response = requests.get(self.env['DEEP_OBSERVER_API_URL'].replace('/health', '/api/incidents'), timeout=30)
-            response.raise_for_status()
-            return response.json()
-        except Exception:
-            return []
 

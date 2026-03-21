@@ -10,7 +10,6 @@ nav:
   - Validation Summary: validation-summary.md
   - Validation Results: validation-results.md
   - Observability Architecture: observability-architecture.md
-  - AI Observability Analysis: ai-observability-analysis.md
   - GitOps Deployment: gitops-deployment.md
   - Secret Management: secret-management.md
   - Vault Secret Management: vault-secret-management.md

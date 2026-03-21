@@ -10,7 +10,6 @@ usersite = site.getusersitepackages()
 if usersite not in sys.path:
     sys.path.append(usersite)
 
-from validator_engine.ai_tests import AITests
 from validator_engine.api_tests import ApiTests
 from validator_engine.clickhouse_tests import ClickHouseTests
 from validator_engine.database_tests import DatabaseTests
@@ -64,7 +63,7 @@ class ValidationEngine:
                 'product_service': r'C:\Projects\Services\leninkart-product-service',
                 'order_service': r'C:\Projects\Services\leninkart-order-service',
             },
-            'services': ['frontend', 'product-service', 'order-service', 'postgres', 'kafka', 'otel-collector', 'observer-stack', 'clickhouse', 'deep-observer'],
+            'services': ['frontend', 'product-service', 'order-service', 'postgres', 'kafka', 'otel-collector', 'observer-stack', 'clickhouse'],
             'kafka_topics': ['product-orders', 'product-events', 'order-events', 'order-created'],
             'testcases_path': str(self.root / 'testcases.md'),
             'port_forwards': {
@@ -85,7 +84,6 @@ class ValidationEngine:
             OTelPipelineTests(self.root, self.env, self.model, self.evidence, self.catalog),
             ClickHouseTests(self.root, self.env, self.model, self.evidence, self.catalog),
             ObservabilityTests(self.root, self.env, self.model, self.evidence, self.catalog),
-            AITests(self.root, self.env, self.model, self.evidence, self.catalog),
             PerformanceTests(self.root, self.env, self.model, self.evidence, self.catalog),
         ]
 
