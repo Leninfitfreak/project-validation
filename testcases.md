@@ -737,16 +737,16 @@ Screenshots that future automation should capture:
 
 | Test ID | Description | Preconditions | Test steps | Expected result | Related services |
 |---|---|---|---|---|---|
-| OBS-001 | Observer Stack UI reachable | docker compose running | open `http://localhost:8080` | UI loads | observer-stack |
-| OBS-002 | Deep Observer frontend reachable | compose running | open `http://localhost:3000` | frontend loads | deep-observer |
-| OBS-003 | Deep Observer API reachable | compose running | call `http://localhost:8081/health` | `200 OK` | deep-observer |
-| OBS-004 | Services page shows active services | recent traffic exists | open services view | frontend, product-service, order-service appear | observer-stack |
-| OBS-005 | Traces explorer shows request traces | recent traffic exists | trigger login/product/order flows, inspect traces | HTTP spans visible; Kafka spans ideally visible | observer-stack, otel |
-| OBS-006 | Logs explorer shows service logs | recent traffic exists | inspect logs view | product-service/order-service logs visible | observer-stack |
-| OBS-007 | Metrics dashboards show live metrics | recent traffic exists | open dashboards or metrics explorer | service metrics and Kafka broker metrics visible | observer-stack |
-| OBS-008 | Messaging queue page behavior | recent Kafka traffic exists | open messaging queues overview | queue view reflects recent Kafka spans, or empty-state behavior is documented if only metrics exist | observer-stack, kafka |
-| OBS-009 | Alert list accessible | signoz UI healthy | open alerts overview | alert rules visible | observer-stack |
-| OBS-010 | Alert provisioning artifacts mapped | repo available | inspect alerts JSON and apply script | alerts-as-code inputs documented | observer-stack |
+| OBS-001 | Grafana UI reachable and login screen available | Grafana port-forward active | open `http://127.0.0.1:3000/login` | Grafana login loads | grafana |
+| OBS-002 | Grafana admin credentials available from cluster-managed secret | cluster reachable | inspect `grafana-admin-secret` in namespace `dev` | admin user/password can be resolved without Git-stored secrets | grafana, kubernetes |
+| OBS-003 | Prometheus UI reachable | Prometheus port-forward active | open `http://127.0.0.1:9090/targets` | Prometheus targets page loads | prometheus |
+| OBS-004 | Prometheus targets healthy for key workloads | recent scrapes exist | inspect `/api/v1/targets` or `/targets` | `product-service`, `order-service`, `kafka-platform`, and `prometheus` are up | prometheus, kafka |
+| OBS-005 | Distributed tracing is explicitly deferred | docs available | inspect tracing decision document | tracing state is documented as deferred or removed from active expectations | docs, observability |
+| OBS-006 | Loki-backed backend logs visible | recent traffic exists | query Loki or open Grafana logs dashboard | product-service/order-service logs are visible | loki, grafana |
+| OBS-007 | LeninKart Grafana dashboards render | recent traffic exists | open dashboard list and curated dashboards | LeninKart dashboards load with visible panels | grafana, prometheus |
+| OBS-008 | Kafka observability remains metrics-based | recent Kafka traffic exists | inspect Kafka overview dashboard and Prometheus metrics | broker availability and traffic metrics are visible without requiring tracing-only queue views | grafana, prometheus, kafka |
+| OBS-009 | Grafana alerting surfaces remain accessible | Grafana healthy | open alerting section or query Grafana API health | alerting UI/API reachable | grafana |
+| OBS-010 | Grafana/Loki/Prometheus provisioning is Git-tracked | repo available | inspect observability bootstrap and infra values | provisioning remains automated and reproducible from Git | grafana, prometheus, loki |
 
 ### 12.9 AI observability validation tests
 
@@ -763,22 +763,22 @@ Screenshots that future automation should capture:
 
 | Test ID | Description | Preconditions | Test steps | Expected result | Related services |
 |---|---|---|---|---|---|
-| OTEL-001 | In-cluster OTEL collector healthy | cluster reachable | `kubectl get pods -n dev -l app=otel-collector -o wide` | collector pod running and ready | kubernetes, otel |
-| OTEL-002 | Host-side OTEL collector healthy | observer stack compose running | inspect `signoz-otel-collector` container and collector health endpoint | collector container running and accepts OTLP traffic | observer-stack, otel |
-| OTEL-003 | Application OTLP export configured | repo and workload manifests available | inspect product and order service env/JVM flags | OTLP endpoint, traces, metrics, and logs exporters enabled | product-service, order-service, otel |
-| OTEL-004 | End-to-end trace export works | fresh frontend traffic generated | trigger signup/login/product/order flow, inspect ClickHouse or UI traces | new request traces appear for application services | frontend, product-service, order-service, otel, clickhouse |
-| OTEL-005 | OTEL pipeline survives business traffic | repeated traffic generated | run multiple UI orders, inspect collector stability and queue-free behavior | no collector crash, telemetry continues to ingest | otel, observer-stack |
+| OTEL-001 | Legacy OTel collector expectations are retired from active validation | current observability stack uses Prometheus/Grafana/Loki | inspect validation engine module list | OTel pipeline tests are not treated as active pass/fail gates | project-validation |
+| OTEL-002 | Java services do not claim active trace backend support | repo and manifests available | inspect service Dockerfiles and deployment env | any remaining OTel remnants are documented as deferred, not as supported runtime tracing | product-service, order-service, docs |
+| OTEL-003 | Trace-dependent UI checks are not required for success | validation docs available | inspect observability test catalog | no active validation requires SigNoz/ClickHouse trace views | project-validation |
+| OTEL-004 | Future trace enablement remains optional | instrumentation plan available | inspect instrumentation plan | trace work is documented as a future decision, not as a blocker | docs |
+| OTEL-005 | Current observability remains metrics-and-logs first | current stack healthy | inspect Grafana dashboards and Loki visibility | metrics and logs validation passes without trace backend dependency | grafana, loki, prometheus |
 
 ### 12.11 ClickHouse telemetry database validation tests
 
 | Test ID | Description | Preconditions | Test steps | Expected result | Related services |
 |---|---|---|---|---|---|
-| CH-001 | ClickHouse container running | observer stack compose running | inspect `signoz-clickhouse` container | container healthy | clickhouse, observer-stack |
-| CH-002 | Required telemetry databases exist | ClickHouse reachable from container | query `SHOW DATABASES` | `signoz_traces`, `signoz_metrics`, `signoz_logs`, `signoz_meter`, `signoz_metadata` exist | clickhouse |
-| CH-003 | Trace tables exist | ClickHouse reachable | query trace schema tables | distributed trace tables such as `distributed_signoz_index_v3` exist | clickhouse |
-| CH-004 | Metric tables exist | ClickHouse reachable | query metric schema tables | distributed metric tables such as `distributed_time_series_v4` exist | clickhouse |
-| CH-005 | Log tables exist | ClickHouse reachable | query log schema tables | distributed log tables such as `distributed_logs_v2` exist | clickhouse |
-| CH-006 | Telemetry rows present after traffic | frontend traffic generated | query trace, metric, and log row counts | counts are greater than zero and increase after traffic | clickhouse, observer-stack, otel |
+| CH-001 | ClickHouse is not part of the supported observability runtime | current stack uses Prometheus/Grafana/Loki | inspect observability architecture docs | ClickHouse is absent from active runtime expectations | docs |
+| CH-002 | ClickHouse checks are retired from active validation | validation engine available | inspect active module list | no ClickHouse validation module runs as a required gate | project-validation |
+| CH-003 | Metrics storage is Prometheus-native | Prometheus healthy | inspect Prometheus targets and queries | metrics are validated via Prometheus instead of ClickHouse tables | prometheus |
+| CH-004 | Logs storage is Loki-native | Loki healthy | inspect Loki queries | logs are validated via Loki instead of ClickHouse-backed log tables | loki |
+| CH-005 | Dashboards query Grafana datasources, not ClickHouse tables | Grafana dashboards provisioned | inspect dashboard datasource configuration | Grafana dashboards use Prometheus/Loki datasources | grafana |
+| CH-006 | Traffic validation no longer depends on ClickHouse row counts | frontend traffic generated | inspect Grafana dashboards and Loki/Prometheus APIs | telemetry visibility is validated without ClickHouse-specific queries | grafana, loki, prometheus |
 
 ### 12.12 External service connectivity validation tests
 

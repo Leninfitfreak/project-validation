@@ -9,7 +9,20 @@ from validator_engine.validators import ValidationResult
 
 
 class GitOpsTests:
-    CORE_APPS = {'dev-ingress', 'dev-order-service', 'dev-product-service', 'frontend-dev', 'otel-collector-dev', 'postgres-dev', 'vault', 'vault-externalsecrets', 'vault-secretstore'}
+    CORE_APPS = {
+        'dev-ingress',
+        'dev-order-service',
+        'dev-product-service',
+        'frontend-dev',
+        'grafana-dev',
+        'loki-dev',
+        'postgres-dev',
+        'prometheus-dev',
+        'promtail-dev',
+        'vault',
+        'vault-externalsecrets',
+        'vault-secretstore',
+    }
 
     def __init__(self, root: Path, env: dict, model: dict, evidence, catalog) -> None:
         self.root = root
@@ -22,7 +35,7 @@ class GitOpsTests:
         repairs = []
         subprocess.run(['kubectl', 'delete', 'application', '-n', 'argocd', 'vault-secretstores-dev'], capture_output=True, text=True)
         repairs.append('deleted duplicate vault-secretstores-dev application when present')
-        for app in ('dev-product-service', 'dev-order-service', 'frontend-dev', 'vault', 'vault-externalsecrets'):
+        for app in ('dev-product-service', 'dev-order-service', 'frontend-dev', 'grafana-dev', 'prometheus-dev', 'loki-dev', 'promtail-dev', 'vault', 'vault-externalsecrets'):
             subprocess.run(['kubectl', 'patch', 'application', '-n', 'argocd', app, '--type', 'merge', '--patch', '{"operation":{"sync":{}}}'], capture_output=True, text=True)
             repairs.append(f'requested sync for {app}')
         return repairs

@@ -11,7 +11,6 @@ if usersite not in sys.path:
     sys.path.append(usersite)
 
 from validator_engine.api_tests import ApiTests
-from validator_engine.clickhouse_tests import ClickHouseTests
 from validator_engine.database_tests import DatabaseTests
 from validator_engine.diagram_generator import DiagramGenerator
 from validator_engine.documentation_builder import DocumentationBuilder
@@ -21,7 +20,6 @@ from validator_engine.gitops_tests import GitOpsTests
 from validator_engine.infra_tests import InfraTests
 from validator_engine.kafka_tests import KafkaTests
 from validator_engine.observability_tests import ObservabilityTests
-from validator_engine.otel_pipeline_tests import OTelPipelineTests
 from validator_engine.performance_tests import PerformanceTests
 from validator_engine.secrets_loader import SecretsLoader
 from validator_engine.testcase_loader import TestCaseCatalog
@@ -57,18 +55,21 @@ class ValidationEngine:
         return {
             'repositories': {
                 'infra': r'C:\Projects\Services\leninkart-infra',
-                'observer_stack': r'C:\Projects\Services\observer-stack',
+                'observability_stack': r'C:\Projects\Services\observability-stack',
                 'kafka_platform': r'C:\Projects\Services\kafka-platform',
                 'frontend': r'C:\Projects\Services\leninkart-frontend',
                 'product_service': r'C:\Projects\Services\leninkart-product-service',
                 'order_service': r'C:\Projects\Services\leninkart-order-service',
             },
-            'services': ['frontend', 'product-service', 'order-service', 'postgres', 'kafka', 'otel-collector', 'observer-stack', 'clickhouse'],
+            'services': ['frontend', 'product-service', 'order-service', 'postgres', 'kafka', 'grafana', 'prometheus', 'loki', 'promtail'],
             'kafka_topics': ['product-orders', 'product-events', 'order-events', 'order-created'],
             'testcases_path': str(self.root / 'testcases.md'),
             'port_forwards': {
                 'argocd': ('argocd', 'svc/argocd-server', '8085:80'),
                 'vault': ('vault', 'svc/vault-ui', '8205:8200'),
+                'grafana': ('dev', 'svc/grafana', '3000:80'),
+                'prometheus': ('dev', 'svc/prometheus-server', '9090:80'),
+                'loki': ('dev', 'svc/loki', '3100:3100'),
             },
         }
 
@@ -81,8 +82,6 @@ class ValidationEngine:
             FrontendTests(self.root, self.env, self.model, self.evidence, self.catalog),
             ApiTests(self.root, self.env, self.model, self.evidence, self.catalog),
             DatabaseTests(self.root, self.env, self.model, self.evidence, self.catalog),
-            OTelPipelineTests(self.root, self.env, self.model, self.evidence, self.catalog),
-            ClickHouseTests(self.root, self.env, self.model, self.evidence, self.catalog),
             ObservabilityTests(self.root, self.env, self.model, self.evidence, self.catalog),
             PerformanceTests(self.root, self.env, self.model, self.evidence, self.catalog),
         ]

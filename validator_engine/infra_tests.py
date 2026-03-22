@@ -30,7 +30,16 @@ class InfraTests:
         pods = self._json('get', 'pods', '-A')['items']
         services = self._json('get', 'svc', '-A')['items']
         ingresses = self._json('get', 'ingress', '-A')['items']
-        core = {'frontend': False, 'product-service': False, 'order-service': False, 'postgres': False, 'otel-collector': False}
+        core = {
+            'frontend': False,
+            'product-service': False,
+            'order-service': False,
+            'postgres': False,
+            'grafana': False,
+            'prometheus': False,
+            'loki': False,
+            'promtail': False,
+        }
         bad = []
         for pod in pods:
             namespace = pod['metadata']['namespace']

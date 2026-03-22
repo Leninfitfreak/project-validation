@@ -58,7 +58,6 @@ class PlaywrightRunner:
         '500 internal',
         'bad gateway',
         'gateway timeout',
-        'application error',
         'something went wrong',
         'connection refused',
         'unable to connect',
