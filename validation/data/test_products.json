@@ -1,0 +1,14 @@
+{
+  "products": [
+    {
+      "name": "Laptop ThinkPad T14",
+      "price": 85000,
+      "description": "Business laptop for validation flow"
+    },
+    {
+      "name": "Mobile Pixel 8",
+      "price": 62000,
+      "description": "Demo mobile device for validation flow"
+    }
+  ]
+}

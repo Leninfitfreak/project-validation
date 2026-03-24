@@ -1,0 +1,8 @@
+{
+  "signup_user": {
+    "full_name": "Demo User",
+    "email_prefix": "demo",
+    "email_domain": "leninkart.local",
+    "password": "LeninKart123"
+  }
+}

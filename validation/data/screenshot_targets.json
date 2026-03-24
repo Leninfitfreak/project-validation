@@ -1,0 +1,43 @@
+{
+  "application": [
+    "frontend-login",
+    "frontend-signup",
+    "frontend-signup-success",
+    "frontend-dashboard",
+    "product-form",
+    "product-list",
+    "order-ledger",
+    "user-activity"
+  ],
+  "gitops": [
+    "argocd-login",
+    "argocd-app-list",
+    "argocd-app-detail"
+  ],
+  "secrets": [
+    "vault-login",
+    "vault-secret-proof"
+  ],
+  "observability": [
+    "grafana-login",
+    "grafana-dashboard-list",
+    "dashboard-platform",
+    "dashboard-product",
+    "dashboard-order",
+    "dashboard-frontend",
+    "dashboard-logs",
+    "dashboard-kafka",
+    "grafana-loki-explore",
+    "prometheus-targets",
+    "grafana-tempo-datasource",
+    "tempo-search",
+    "tempo-product-trace",
+    "tempo-order-trace"
+  ],
+  "messaging": [
+    "kafka-runtime-health"
+  ],
+  "infra": [
+    "kubernetes-pod-inventory"
+  ]
+}

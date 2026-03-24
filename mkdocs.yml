@@ -3,15 +3,16 @@ site_description: Automated validation and evidence for the LeninKart platform
 theme:
   name: material
 nav:
-  - Home: index.md
-  - System Architecture: system-architecture.md
-  - Application Workflow: application-workflow.md
-  - Test Cases: test-cases.md
-  - Validation Summary: validation-summary.md
-  - Validation Results: validation-results.md
-  - Observability Architecture: observability-architecture.md
-  - GitOps Deployment: gitops-deployment.md
-  - Secret Management: secret-management.md
-  - Vault Secret Management: vault-secret-management.md
-  - System Evidence: system-evidence.md
-  - Screenshots: screenshots.md
+  - Overview: index.md
+  - Validation Framework:
+      - Platform Test Case Matrix: PLATFORM_TEST_CASE_MATRIX.md
+      - Validation Execution Plan: VALIDATION_EXECUTION_PLAN.md
+      - Platform Validation Results: PLATFORM_VALIDATION_RESULTS.md
+      - Platform Evidence Index: PLATFORM_EVIDENCE_INDEX.md
+      - Screenshots Gallery: SCREENSHOTS_GALLERY.md
+      - MkDocs Navigation Plan: MKDOCS_NAVIGATION_PLAN.md
+      - MkDocs Image Fix Report: MKDOCS_IMAGE_FIX_REPORT.md
+      - Validation Cleanup Report: VALIDATION_CLEANUP_REPORT.md
+      - Screenshot Clean Run Policy: SCREENSHOT_CLEAN_RUN_POLICY.md
+      - Screenshot Quality Report: SCREENSHOT_QUALITY_REPORT.md
+      - Vault Secret Inventory Report: VAULT_SECRET_INVENTORY_REPORT.md

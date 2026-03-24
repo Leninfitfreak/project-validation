@@ -1,0 +1,100 @@
+defaults:
+  browser:
+    headless: true
+    viewport:
+      width: 1600
+      height: 1000
+    slow_mo_ms: 0
+  waits:
+    timeout_ms: 20000
+    long_timeout_ms: 45000
+    retry_count: 3
+    retry_sleep_ms: 1500
+  screenshot_quality:
+    min_width: 400
+    min_height: 250
+    min_unique_colors: 24
+    min_stddev: 8.0
+    max_dominant_ratio: 0.92
+  ports:
+    grafana:
+      namespace: dev
+      resource: svc/grafana
+      ports: 3000:80
+    prometheus:
+      namespace: dev
+      resource: svc/prometheus-server
+      ports: 9090:80
+    loki:
+      namespace: dev
+      resource: svc/loki
+      ports: 3100:3100
+    tempo:
+      namespace: dev
+      resource: svc/tempo
+      ports: 3200:3200
+    argocd:
+      namespace: argocd
+      resource: svc/argocd-server
+      ports: 8085:80
+    vault:
+      namespace: vault
+      resource: svc/vault-ui
+      ports: 8205:8200
+  paths:
+    screenshots:
+      application: screenshots/application
+      infra: screenshots/infra
+      gitops: screenshots/gitops
+      secrets: screenshots/secrets
+      observability: screenshots/observability
+      messaging: screenshots/messaging
+    artifacts: artifacts
+    validation_output: validation-output
+    docs: docs
+  observability:
+    dashboards:
+      - LeninKart Platform Overview
+      - LeninKart Product Service Overview
+      - LeninKart Order Service Overview
+      - LeninKart Frontend Overview
+      - LeninKart Logs Overview
+      - LeninKart Kafka Overview
+    grafana:
+      folder_hint: LeninKart
+      trace_services:
+        - product-service
+        - order-service
+  gitops:
+    expected_apps:
+      - leninkart-root
+      - frontend-dev
+      - dev-product-service
+      - dev-order-service
+      - postgres-dev
+      - grafana-dev
+      - prometheus-dev
+      - loki-dev
+      - promtail-dev
+      - tempo-dev
+      - vault
+      - vault-secretstore
+      - vault-externalsecrets
+  kubernetes:
+    namespaces:
+      - argocd
+      - dev
+      - vault
+      - external-secrets-system
+      - ingress-nginx
+    expected_pods:
+      - frontend
+      - product-service
+      - order-service
+      - postgres-v2-0
+      - grafana
+      - prometheus-server
+      - loki
+      - promtail
+      - tempo
+      - traffic-generator
