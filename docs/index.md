@@ -9,6 +9,7 @@ This site contains the current end-to-end LeninKart platform evidence generated 
 - Secrets proof: Vault access and safe secret-path artifact
 - Messaging proof: external Kafka runtime artifact and Kafka dashboard
 - Observability proof: Grafana dashboards, Loki logs, Prometheus targets, Tempo traces
+- CI / DevSecOps proof: quality gates, secret scanning, vulnerability scanning, and pipeline evidence planning
 
 ## Validation Rules
 
@@ -24,3 +25,12 @@ This site contains the current end-to-end LeninKart platform evidence generated 
 - `messaging`: 2 captured step(s)
 - `observability`: 14 captured step(s)
 - `secrets`: 3 captured step(s)
+
+## CI / DevSecOps Documentation
+
+This MkDocs site also carries the LeninKart CI baseline design and validation notes:
+
+- repo-by-repo CI gap analysis
+- local command verification and workaround map
+- secret scanning and vulnerability scanning rationale
+- workflow overview and planned public pipeline evidence index

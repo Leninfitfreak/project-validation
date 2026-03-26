@@ -9,6 +9,15 @@ nav:
       - Validation Execution Plan: VALIDATION_EXECUTION_PLAN.md
       - Platform Validation Results: PLATFORM_VALIDATION_RESULTS.md
       - Platform Evidence Index: PLATFORM_EVIDENCE_INDEX.md
+      - CI Gap Analysis: CI_GAP_ANALYSIS.md
+      - CI Test Command Map: CI_TEST_COMMAND_MAP.md
+      - CI Validation Report: CI_VALIDATION_REPORT.md
+      - DevSecOps Summary: DEVSECOPS_SUMMARY.md
+      - Secret Scan Report: SECRET_SCAN_REPORT.md
+      - Vulnerability Scan Report: VULNERABILITY_SCAN_REPORT.md
+      - Workflow Overview: WORKFLOW_OVERVIEW.md
+      - Quality Gates Summary: QUALITY_GATES_SUMMARY.md
+      - Pipeline Evidence Index: PIPELINE_EVIDENCE_INDEX.md
       - Screenshots Gallery: SCREENSHOTS_GALLERY.md
       - MkDocs Navigation Plan: MKDOCS_NAVIGATION_PLAN.md
       - MkDocs Image Fix Report: MKDOCS_IMAGE_FIX_REPORT.md
