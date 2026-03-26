@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Frontend Quality Summary",
+    "url": "https://github.com/Leninfitfreak/leninkart-frontend/actions/runs/23599512037",
+    "screenshot": "frontend-quality-summary.png",
+    "wait_texts": ["Frontend Quality & Security", "Triggered via push", "Success"],
+    "type": "summary"
+  },
+  {
+    "name": "Frontend Quality Job",
+    "url": "https://github.com/Leninfitfreak/leninkart-frontend/actions/runs/23599512037/job/68725273368",
+    "screenshot": "frontend-quality-job.png",
+    "wait_texts": [
+      "Run frontend tests",
+      "Build frontend bundle",
+      "Run Gitleaks secret scan",
+      "Run Trivy filesystem scan"
+    ],
+    "type": "job"
+  },
+  {
+    "name": "Product Service Quality Summary",
+    "url": "https://github.com/Leninfitfreak/leninkart-product-service/actions/runs/23599512416",
+    "screenshot": "product-quality-summary.png",
+    "wait_texts": ["Product Service Quality & Security", "Triggered via push", "Success"],
+    "type": "summary"
+  },
+  {
+    "name": "Order Service Quality Summary",
+    "url": "https://github.com/Leninfitfreak/leninkart-order-service/actions/runs/23599512566",
+    "screenshot": "order-quality-summary.png",
+    "wait_texts": ["Order Service Quality & Security", "Triggered via push", "Success"],
+    "type": "summary"
+  },
+  {
+    "name": "Infra Quality Summary",
+    "url": "https://github.com/Leninfitfreak/leninkart-infra/actions/runs/23599611267",
+    "screenshot": "infra-quality-summary.png",
+    "wait_texts": ["Infra Quality & Security", "Triggered via push", "Success"],
+    "type": "summary"
+  },
+  {
+    "name": "Project Validation Quality Summary",
+    "url": "https://github.com/Leninfitfreak/project-validation/actions/runs/23599514246",
+    "screenshot": "project-validation-quality-summary.png",
+    "wait_texts": ["Project Validation Quality & Security", "Triggered via push", "Success"],
+    "type": "summary"
+  },
+  {
+    "name": "Kafka Platform Quality Summary",
+    "url": "https://github.com/Leninfitfreak/kafka-platform/actions/runs/23599513549",
+    "screenshot": "kafka-quality-summary.png",
+    "wait_texts": ["Kafka Platform Quality & Security", "Triggered via push", "Success"],
+    "type": "summary"
+  }
+]

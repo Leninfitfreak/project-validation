@@ -13,7 +13,7 @@ The LeninKart platform now includes a practical CI/DevSecOps layer designed for:
 
 - automated build/test validation
 - secret scanning with `Gitleaks`
-- vulnerability/config/image scanning with `Trivy`
+- vulnerability/config/image scanning with pinned `Trivy` container commands
 - infra linting with `Helm`
 - docs build verification for `project-validation`
 - compose syntax validation for `kafka-platform`
@@ -29,4 +29,21 @@ The LeninKart platform now includes a practical CI/DevSecOps layer designed for:
 
 - local workstation lacks Maven
 - local Docker daemon is currently unavailable
-- final GitHub Actions screenshot evidence depends on pushing the workflow files and capturing the public runs afterward
+- GitHub still emits a non-blocking Node 20 deprecation warning for some marketplace actions
+
+## Final Proof Snapshot
+
+The final CI evidence set now includes successful public GitHub Actions runs for:
+
+- frontend quality/security
+- product-service quality/security
+- order-service quality/security
+- infra quality/security
+- project-validation quality/security
+- kafka-platform quality/security
+
+Representative screenshots:
+
+- ![Frontend CI summary](screenshots/ci/frontend-quality-summary.png)
+- ![Frontend CI job detail](screenshots/ci/frontend-quality-job.png)
+- ![Infra CI summary](screenshots/ci/infra-quality-summary.png)
