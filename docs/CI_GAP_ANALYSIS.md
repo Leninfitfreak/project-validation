@@ -187,7 +187,7 @@ Classification:
 - Frontend had no stable test entry and needed a small test-safe mount adjustment
 - Frontend test path needed an `axios` mock to work with the current CRA/Jest dependency behavior
 - Infra Helm lint needed env values for service charts instead of bare chart linting
-- The initial workflow draft pinned `aquasecurity/trivy-action@0.30.0`, and the first fix still missed the required `v` prefix. The working form is `aquasecurity/trivy-action@v0.33.1`
+- The initial Trivy GitHub Action references were unstable for this use case, so the workflows were hardened to use a pinned `aquasec/trivy:0.65.0` Docker image directly instead of the GitHub Action wrapper
 
 ### Local Machine / Toolchain Limitations
 
