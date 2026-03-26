@@ -37,6 +37,17 @@ class ValidationConfig:
 
 def load_config(root: Path) -> ValidationConfig:
     env = {key: value for key, value in dotenv_values(root / ".env").items() if value is not None}
+    env.setdefault("DEPLOYMENT_POC_ROOT", str((root.parent / "deployment-poc").resolve()))
+    env.setdefault("LENINKART_INFRA_ROOT", str((root.parent / "leninkart-infra").resolve()))
+    env.setdefault("DEPLOYMENT_POC_REPO", "Leninfitfreak/deployment-poc")
+    env.setdefault("DEPLOYMENT_POC_GITOPS_REPO", "Leninfitfreak/leninkart-infra")
+    env.setdefault("DEPLOYMENT_POC_GITOPS_BRANCH", "dev")
+    env.setdefault("DEPLOYMENT_POC_WORKFLOW_FILE", "deploy-from-jira.yml")
+    env.setdefault("DEPLOYMENT_POC_TICKET", "SCRUM-6")
+    env.setdefault("DEPLOYMENT_POC_ARGOCD_APP", "frontend-dev")
+    env.setdefault("DEPLOYMENT_POC_VALUES_PATH", "applications/frontend/helm/values-dev.yaml")
+    env.setdefault("DEPLOYMENT_POC_RUNNER_NAME", "leninkart-runner")
+    env.setdefault("JIRA_TICKET_URL_TEMPLATE", "")
     env.setdefault("INGRESS_URL", "http://127.0.0.1/")
     env.setdefault("ARGOCD_URL", "http://127.0.0.1:8085")
     env.setdefault("VAULT_URL", "http://127.0.0.1:8205")

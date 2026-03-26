@@ -15,6 +15,6 @@
 
 ## Validation Status
 
-- Screenshots copied into docs: `28`
+- Screenshots copied into docs: `41`
 - All final image references use relative paths.
 - MkDocs build should now package screenshots into the generated site output.

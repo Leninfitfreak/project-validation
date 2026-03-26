@@ -44,6 +44,7 @@ defaults:
   paths:
     screenshots:
       application: screenshots/application
+      deployment: screenshots/deployment
       infra: screenshots/infra
       gitops: screenshots/gitops
       secrets: screenshots/secrets
@@ -65,6 +66,18 @@ defaults:
       trace_services:
         - product-service
         - order-service
+  deployment_poc:
+    github_api_base: https://api.github.com
+    workflow_job_name: deploy
+    expected_runner_name: leninkart-runner
+    acceptable_actions:
+      - deployed
+      - already_deployed
+      - reconciled
+      - rolled_back
+      - rollback_skipped
+      - test_mode
+      - rollback_test_mode
   gitops:
     expected_apps:
       - leninkart-root

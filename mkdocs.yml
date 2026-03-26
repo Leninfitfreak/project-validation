@@ -5,6 +5,8 @@ theme:
 nav:
   - Overview: index.md
   - Validation Framework:
+      - Deployment POC Validation Report: DEPLOYMENT_POC_VALIDATION_REPORT.md
+      - Deployment POC Evidence Index: DEPLOYMENT_POC_EVIDENCE_INDEX.md
       - Platform Test Case Matrix: PLATFORM_TEST_CASE_MATRIX.md
       - Validation Execution Plan: VALIDATION_EXECUTION_PLAN.md
       - Platform Validation Results: PLATFORM_VALIDATION_RESULTS.md

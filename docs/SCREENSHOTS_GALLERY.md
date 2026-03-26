@@ -34,6 +34,32 @@
 
 ![User activity overview](screenshots/application/user-activity.png)
 
+## Deployment
+
+### DEP-001 Jira ticket proof
+
+![Jira ticket proof](screenshots/deployment/jira-ticket-proof.png)
+
+### DEP-002 GitHub Actions deployment run summary
+
+![GitHub Actions deployment run summary](screenshots/deployment/github-actions-run-summary.png)
+
+### DEP-003 GitHub Actions runner proof
+
+![GitHub Actions runner proof](screenshots/deployment/github-actions-runner-proof.png)
+
+### DEP-004 deployment-poc result proof
+
+![deployment-poc result proof](screenshots/deployment/deployment-result-proof.png)
+
+### DEP-005 GitOps commit proof
+
+![GitOps commit proof](screenshots/deployment/gitops-commit-proof.png)
+
+### DEP-006 ArgoCD deployment application proof
+
+![ArgoCD deployment application proof](screenshots/deployment/argocd-deployment-app.png)
+
 ## Gitops
 
 ### GIT-001 ArgoCD login page

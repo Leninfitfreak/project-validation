@@ -10,6 +10,7 @@ from validation.core.config import load_config
 from validation.core.reporting import RunRecorder, StepResult
 from validation.flows import (
     app_auth_flow,
+    deployment_flow,
     gitops_flow,
     infra_flow,
     messaging_flow,
@@ -89,10 +90,11 @@ def write_docs(config, recorder: RunRecorder) -> None:
                 "2. Load URLs, credentials, wait rules, screenshot quality thresholds, and demo data from `.env` and `validation/data/*`.",
                 "3. Capture infrastructure and messaging CLI proof before browser work begins.",
                 "4. Run the frontend user journey in order: login page, signup, authenticated dashboard, product creation, buy flow, and order history proof.",
-                "5. Run GitOps and Vault UI proof flows and generate the safe Vault secret inventory report.",
-                "6. Run observability proof for Grafana dashboards, Loki Explore, Prometheus targets, and Tempo search/detail pages.",
-                "7. Reject blank or weak screenshots automatically, retry with longer waits, and only publish screenshots that pass image-quality checks.",
-                "8. Write markdown, JSON, screenshot manifest, and validation-output bundles for MkDocs and portfolio documentation.",
+                "5. Validate the Jira -> GitHub Actions -> GitOps -> ArgoCD deployment POC using public GitHub pages, local deployment artifacts, and ArgoCD state proof.",
+                "6. Run GitOps and Vault UI proof flows and generate the safe Vault secret inventory report.",
+                "7. Run observability proof for Grafana dashboards, Loki Explore, Prometheus targets, and Tempo search/detail pages.",
+                "8. Reject blank or weak screenshots automatically, retry with longer waits, and only publish screenshots that pass image-quality checks.",
+                "9. Write markdown, JSON, screenshot manifest, and validation-output bundles for MkDocs and portfolio documentation.",
             ]
         ),
         encoding="utf-8",
@@ -146,6 +148,8 @@ def write_docs(config, recorder: RunRecorder) -> None:
                 "# MkDocs Navigation Plan",
                 "",
                 "- Overview",
+                "- Deployment POC Validation Report",
+                "- Deployment POC Evidence Index",
                 "- Platform Test Case Matrix",
                 "- Validation Execution Plan",
                 "- Platform Validation Results",
@@ -155,6 +159,7 @@ def write_docs(config, recorder: RunRecorder) -> None:
                 "- Screenshot Clean Run Policy",
                 "- Screenshot Quality Report",
                 "- Application Validation",
+                "- Deployment POC Validation",
                 "- GitOps Validation",
                 "- Secrets Validation",
                 "- Messaging Validation",
@@ -176,6 +181,7 @@ def write_docs(config, recorder: RunRecorder) -> None:
                 "## Covered Areas",
                 "",
                 "- Application journey: signup, login, product creation, buy flow, order history",
+                "- Deployment POC proof: Jira ticket evidence, GitHub Actions run, deployment result, GitOps commit, ArgoCD sync and health",
                 "- GitOps proof: ArgoCD login, applications list, application detail",
                 "- Secrets proof: Vault access and safe secret-path artifact",
                 "- Messaging proof: external Kafka runtime artifact and Kafka dashboard",
@@ -213,6 +219,85 @@ def write_docs(config, recorder: RunRecorder) -> None:
             gallery_lines.append(f"![{step.title}]({relative})")
             gallery_lines.append("")
     gallery.write_text("\n".join(gallery_lines), encoding="utf-8")
+
+
+def write_deployment_docs(config, recorder: RunRecorder) -> None:
+    summary_path = config.artifacts_dir / "deployment-poc-validation-summary.json"
+    if not summary_path.exists():
+        return
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    docs = config.docs_dir
+    screenshot_map = _sync_docs_screenshots(config)
+    steps = [step for step in recorder.steps if step.category == "deployment"]
+
+    report_lines = [
+        "# Deployment POC Validation Report",
+        "",
+        "## Validated Scope",
+        "",
+        "- Jira deployment ticket proof",
+        "- GitHub Actions workflow summary and self-hosted runner proof",
+        "- deployment-poc result/report evidence",
+        "- GitOps commit and target file proof",
+        "- ArgoCD final Sync and Health proof",
+        "",
+        "## Latest Validated Deployment",
+        "",
+        f"- Jira ticket: `{summary.get('jira_ticket', '')}`",
+        f"- Workflow run: `#{summary.get('run_number', '')}`",
+        f"- Workflow URL: `{summary.get('run_url', '')}`",
+        f"- Runner: `{summary.get('runner_name', '')}`",
+        f"- Deployment action: `{summary.get('deployment_action', '')}`",
+        f"- Requested version: `{summary.get('requested_version', '')}`",
+        f"- Resolved version: `{summary.get('resolved_version', '')}`",
+        f"- GitOps commit: `{summary.get('gitops_commit', '')}`",
+        f"- GitOps values path: `{summary.get('values_path', '')}`",
+        f"- ArgoCD app: `{summary.get('argocd_app', '')}`",
+        f"- Final sync: `{summary.get('argocd_sync', '')}`",
+        f"- Final health: `{summary.get('argocd_health', '')}`",
+        f"- Jira proof mode: `{summary.get('jira_proof_mode', '')}`",
+        "",
+        "## Screenshot Proof",
+        "",
+    ]
+    for step in steps:
+        if not step.screenshot:
+            continue
+        relative = screenshot_map.get(step.screenshot, step.screenshot)
+        report_lines.extend(
+            [
+                f"### {step.id} {step.title}",
+                "",
+                f"- Detail: {step.detail}",
+                f"- Screenshot: [{relative}]({relative})",
+                "",
+                f"![{step.title}]({relative})",
+                "",
+            ]
+        )
+    if summary.get("warnings"):
+        report_lines.extend(["## Warnings", ""])
+        for warning in summary["warnings"]:
+            report_lines.append(f"- {warning}")
+        report_lines.append("")
+    report_lines.extend(["## Final Verdict", "", f"`{summary.get('verdict', 'UNKNOWN')}`", ""])
+    (docs / "DEPLOYMENT_POC_VALIDATION_REPORT.md").write_text("\n".join(report_lines), encoding="utf-8")
+
+    index_lines = ["# Deployment POC Evidence Index", ""]
+    for step in steps:
+        index_lines.append(f"## `{step.id}` {step.title}")
+        index_lines.append("")
+        index_lines.append(f"- Status: `{step.status}`")
+        index_lines.append(f"- Detail: {step.detail}")
+        if step.screenshot:
+            relative = screenshot_map.get(step.screenshot, step.screenshot)
+            index_lines.append(f"- Screenshot: [{relative}]({relative})")
+            index_lines.append("")
+            index_lines.append(f"![{step.title}]({relative})")
+        if step.artifact:
+            index_lines.append(f"- Artifact: `{step.artifact}`")
+        index_lines.append("")
+    (docs / "DEPLOYMENT_POC_EVIDENCE_INDEX.md").write_text("\n".join(index_lines), encoding="utf-8")
 
 
 def write_cleanup_report(config, recorder: RunRecorder) -> Path:
@@ -326,42 +411,10 @@ def write_mkdocs_image_fix_report(config) -> Path:
 
 
 def write_evidence_json(config, recorder: RunRecorder) -> Path:
-    payload = {
-        "generated_at": recorder.started_at,
-        "results": {
-            "application": [
-                step.__dict__
-                for step in recorder.steps
-                if step.category == "application"
-            ],
-            "gitops": [
-                step.__dict__
-                for step in recorder.steps
-                if step.category == "gitops"
-            ],
-            "secrets": [
-                step.__dict__
-                for step in recorder.steps
-                if step.category == "secrets"
-            ],
-            "observability": [
-                step.__dict__
-                for step in recorder.steps
-                if step.category == "observability"
-            ],
-            "messaging": [
-                step.__dict__
-                for step in recorder.steps
-                if step.category == "messaging"
-            ],
-            "infra": [
-                step.__dict__
-                for step in recorder.steps
-                if step.category == "infra"
-            ],
-        },
-        "artifacts": recorder.artifacts,
-    }
+    results: dict[str, list[dict]] = {}
+    for step in recorder.steps:
+        results.setdefault(step.category, []).append(step.__dict__)
+    payload = {"generated_at": recorder.started_at, "results": results, "artifacts": recorder.artifacts}
     target = config.artifacts_dir / "evidence.json"
     target.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     return target
@@ -388,6 +441,10 @@ def main() -> int:
         gitops_flow.run(gitops_page, config, recorder)
         gitops_page.close()
 
+        deployment_page = browser.new_page()
+        deployment_flow.run(deployment_page, config, recorder)
+        deployment_page.close()
+
         vault_page = browser.new_page()
         vault_flow.run(vault_page, config, recorder)
         vault_page.close()
@@ -397,6 +454,7 @@ def main() -> int:
         obs_page.close()
 
     write_docs(config, recorder)
+    write_deployment_docs(config, recorder)
     recorder.add_artifact(write_cleanup_report(config, recorder))
     recorder.add_artifact(write_clean_run_policy(config))
     quality_report, quality_json = write_screenshot_quality_report(config)

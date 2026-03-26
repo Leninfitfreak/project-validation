@@ -134,6 +134,68 @@
 ![ArgoCD app detail](screenshots/gitops/argocd-app-detail.png)
 
 
+## `DEP-001` Jira ticket proof
+
+- Category: `deployment`
+- Status: `PASS`
+- Proof: Deployment ticket proof captured from the live Jira page or an honest artifact-backed fallback
+- Screenshot: [screenshots/deployment/jira-ticket-proof.png](screenshots/deployment/jira-ticket-proof.png)
+
+![Jira ticket proof](screenshots/deployment/jira-ticket-proof.png)
+
+
+## `DEP-002` GitHub Actions deployment run summary
+
+- Category: `deployment`
+- Status: `PASS`
+- Proof: Public workflow run summary loaded with successful deployment job visible
+- Screenshot: [screenshots/deployment/github-actions-run-summary.png](screenshots/deployment/github-actions-run-summary.png)
+
+![GitHub Actions deployment run summary](screenshots/deployment/github-actions-run-summary.png)
+
+
+## `DEP-003` GitHub Actions runner proof
+
+- Category: `deployment`
+- Status: `PASS`
+- Proof: Readable runner proof confirms the validated deployment run used the expected self-hosted runner and labels
+- Screenshot: [screenshots/deployment/github-actions-runner-proof.png](screenshots/deployment/github-actions-runner-proof.png)
+- Artifact: `artifacts/deployment-poc/github-actions-runner-proof.html`
+
+![GitHub Actions runner proof](screenshots/deployment/github-actions-runner-proof.png)
+
+
+## `DEP-004` deployment-poc result proof
+
+- Category: `deployment`
+- Status: `PASS`
+- Proof: Readable deployment result artifact rendered with ticket, action, commit, and ArgoCD details
+- Screenshot: [screenshots/deployment/deployment-result-proof.png](screenshots/deployment/deployment-result-proof.png)
+- Artifact: `artifacts/deployment-poc/deployment-result-proof.html`
+
+![deployment-poc result proof](screenshots/deployment/deployment-result-proof.png)
+
+
+## `DEP-005` GitOps commit proof
+
+- Category: `deployment`
+- Status: `PASS`
+- Proof: Public GitHub commit page shows the relevant leninkart-infra revision and target values file path
+- Screenshot: [screenshots/deployment/gitops-commit-proof.png](screenshots/deployment/gitops-commit-proof.png)
+
+![GitOps commit proof](screenshots/deployment/gitops-commit-proof.png)
+
+
+## `DEP-006` ArgoCD deployment application proof
+
+- Category: `deployment`
+- Status: `PASS`
+- Proof: ArgoCD application detail shows the validated app as Synced and Healthy on the expected revision
+- Screenshot: [screenshots/deployment/argocd-deployment-app.png](screenshots/deployment/argocd-deployment-app.png)
+
+![ArgoCD deployment application proof](screenshots/deployment/argocd-deployment-app.png)
+
+
 ## `SEC-001` Vault login page
 
 - Category: `secrets`

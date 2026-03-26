@@ -8,6 +8,8 @@ from .config import ValidationConfig
 
 GENERATED_DOCS = [
     "index.md",
+    "DEPLOYMENT_POC_VALIDATION_REPORT.md",
+    "DEPLOYMENT_POC_EVIDENCE_INDEX.md",
     "PLATFORM_TEST_CASE_MATRIX.md",
     "VALIDATION_EXECUTION_PLAN.md",
     "PLATFORM_EVIDENCE_INDEX.md",
