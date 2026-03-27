@@ -5,6 +5,7 @@ Clean, modular validation and evidence framework for the LeninKart platform.
 ## What It Covers
 
 - Real application flow: signup, login, product creation, buy flow, and order history proof
+- Real deployment proof: Jira-driven deployment validation, GitHub Actions run proof, GitOps commit proof, ArgoCD sync and health proof, and application reachability proof
 - GitOps and infrastructure proof: ArgoCD, Kubernetes inventory, ExternalSecret evidence
 - Secrets proof: Vault login, safe inventory page, and secret inventory report without values
 - Observability proof: Grafana dashboards, Loki logs, Prometheus targets, and Tempo traces
@@ -56,3 +57,15 @@ python -m validation.runners.run_vault_validation
 - `screenshots/`: final evidence only
 - `artifacts/`: execution summaries, manifests, CLI proof, and retry diagnostics
 - `validation-output/`: packaged copy of the latest run
+
+## Real UI Proof
+
+Deployment and platform presentation proof now prioritizes real browser UI over synthetic artifacts.
+
+- GitHub Actions workflow proof is captured from the real public workflow and job pages
+- GitOps proof is captured from the real GitHub commit UI
+- ArgoCD proof is captured from the real application page
+- application proof is captured from the live LeninKart UI
+- observability proof is captured from real Grafana, Prometheus, Loki, and Tempo pages
+
+If an authenticated UI cannot be reached safely, the framework records an honest warning instead of faking a screenshot.
