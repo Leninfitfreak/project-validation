@@ -137,18 +137,14 @@
 ## `DEP-001` Jira ticket proof
 
 - Category: `deployment`
-- Status: `PASS`
-- Proof: Deployment ticket proof captured from the live Jira page or an honest artifact-backed fallback
-- Screenshot: [screenshots/deployment/jira-ticket-proof.png](screenshots/deployment/jira-ticket-proof.png)
-
-![Jira ticket proof](screenshots/deployment/jira-ticket-proof.png)
-
+- Status: `WARN`
+- Proof: Real Jira UI proof is not configured in project-validation; no synthetic fallback was used as primary evidence
 
 ## `DEP-002` GitHub Actions deployment run summary
 
 - Category: `deployment`
 - Status: `PASS`
-- Proof: Public workflow run summary loaded with successful deployment job visible
+- Proof: Real GitHub Actions workflow run page captured with job summary visible
 - Screenshot: [screenshots/deployment/github-actions-run-summary.png](screenshots/deployment/github-actions-run-summary.png)
 
 ![GitHub Actions deployment run summary](screenshots/deployment/github-actions-run-summary.png)
@@ -158,9 +154,8 @@
 
 - Category: `deployment`
 - Status: `PASS`
-- Proof: Readable runner proof confirms the validated deployment run used the expected self-hosted runner and labels
+- Proof: Real GitHub job page captured with the self-hosted runner details visible
 - Screenshot: [screenshots/deployment/github-actions-runner-proof.png](screenshots/deployment/github-actions-runner-proof.png)
-- Artifact: `artifacts/deployment-poc/github-actions-runner-proof.html`
 
 ![GitHub Actions runner proof](screenshots/deployment/github-actions-runner-proof.png)
 
@@ -169,9 +164,8 @@
 
 - Category: `deployment`
 - Status: `PASS`
-- Proof: Readable deployment result artifact rendered with ticket, action, commit, and ArgoCD details
+- Proof: Real GitHub workflow run page captured with the deployment-result artifact visible as primary browser proof
 - Screenshot: [screenshots/deployment/deployment-result-proof.png](screenshots/deployment/deployment-result-proof.png)
-- Artifact: `artifacts/deployment-poc/deployment-result-proof.html`
 
 ![deployment-poc result proof](screenshots/deployment/deployment-result-proof.png)
 
@@ -180,7 +174,7 @@
 
 - Category: `deployment`
 - Status: `PASS`
-- Proof: Public GitHub commit page shows the relevant leninkart-infra revision and target values file path
+- Proof: Real public GitHub commit page shows the leninkart-infra revision and changed values file
 - Screenshot: [screenshots/deployment/gitops-commit-proof.png](screenshots/deployment/gitops-commit-proof.png)
 
 ![GitOps commit proof](screenshots/deployment/gitops-commit-proof.png)
@@ -190,10 +184,20 @@
 
 - Category: `deployment`
 - Status: `PASS`
-- Proof: ArgoCD application detail shows the validated app as Synced and Healthy on the expected revision
+- Proof: Real ArgoCD application page shows Synced and Healthy on the expected revision
 - Screenshot: [screenshots/deployment/argocd-deployment-app.png](screenshots/deployment/argocd-deployment-app.png)
 
 ![ArgoCD deployment application proof](screenshots/deployment/argocd-deployment-app.png)
+
+
+## `DEP-007` Application deployment proof
+
+- Category: `deployment`
+- Status: `PASS`
+- Proof: Real browser screenshot confirms the deployed LeninKart application is reachable
+- Screenshot: [screenshots/deployment/application-home-proof.png](screenshots/deployment/application-home-proof.png)
+
+![Application deployment proof](screenshots/deployment/application-home-proof.png)
 
 
 ## `SEC-001` Vault login page

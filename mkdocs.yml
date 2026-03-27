@@ -5,6 +5,7 @@ theme:
 nav:
   - Overview: index.md
   - Validation Framework:
+      - Real UI Validation: REAL_UI_VALIDATION.md
       - Deployment POC Validation Report: DEPLOYMENT_POC_VALIDATION_REPORT.md
       - Deployment POC Evidence Index: DEPLOYMENT_POC_EVIDENCE_INDEX.md
       - Platform Test Case Matrix: PLATFORM_TEST_CASE_MATRIX.md
@@ -23,6 +24,7 @@ nav:
       - Screenshots Gallery: SCREENSHOTS_GALLERY.md
       - MkDocs Navigation Plan: MKDOCS_NAVIGATION_PLAN.md
       - MkDocs Image Fix Report: MKDOCS_IMAGE_FIX_REPORT.md
+      - Secret Rotation Warning: SECRET_ROTATION_WARNING.md
       - Validation Cleanup Report: VALIDATION_CLEANUP_REPORT.md
       - Screenshot Clean Run Policy: SCREENSHOT_CLEAN_RUN_POLICY.md
       - Screenshot Quality Report: SCREENSHOT_QUALITY_REPORT.md

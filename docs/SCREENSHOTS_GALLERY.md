@@ -36,10 +36,6 @@
 
 ## Deployment
 
-### DEP-001 Jira ticket proof
-
-![Jira ticket proof](screenshots/deployment/jira-ticket-proof.png)
-
 ### DEP-002 GitHub Actions deployment run summary
 
 ![GitHub Actions deployment run summary](screenshots/deployment/github-actions-run-summary.png)
@@ -59,6 +55,10 @@
 ### DEP-006 ArgoCD deployment application proof
 
 ![ArgoCD deployment application proof](screenshots/deployment/argocd-deployment-app.png)
+
+### DEP-007 Application deployment proof
+
+![Application deployment proof](screenshots/deployment/application-home-proof.png)
 
 ## Gitops
 
