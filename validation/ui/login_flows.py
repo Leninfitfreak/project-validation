@@ -7,13 +7,16 @@ from validation.core.waits import wait_for_condition
 from validation.ui.playwright_helpers import body_text, click_if_visible
 
 
-JIRA_LOGIN_TEXTS = ["Log in", "Continue", "Atlassian", "Sign up"]
+JIRA_LOGIN_TEXTS = ["Log in", "Continue", "Atlassian", "Sign up", "Email", "Passkey"]
+
+
+def jira_base_url(config: ValidationConfig) -> str:
+    return (config.env.get("JIRA_BASE_URL") or config.env.get("JIRA_URL") or "").strip()
 
 
 def jira_ui_available(config: ValidationConfig) -> bool:
     template = (config.env.get("JIRA_TICKET_URL_TEMPLATE") or "").strip()
-    base = (config.env.get("JIRA_BASE_URL") or "").strip()
-    return bool(template or base)
+    return bool(template or jira_base_url(config))
 
 
 def jira_ui_login_available(config: ValidationConfig) -> bool:
@@ -26,24 +29,30 @@ def jira_ticket_url(config: ValidationConfig, ticket: str) -> str:
     template = (config.env.get("JIRA_TICKET_URL_TEMPLATE") or "").strip()
     if template:
         return template.format(ticket=ticket)
-    return config.env["JIRA_BASE_URL"].rstrip("/") + f"/browse/{ticket}"
+    return jira_base_url(config).rstrip("/") + f"/browse/{ticket}"
 
 
 def jira_ui_prereq_message(config: ValidationConfig) -> str:
     if not jira_ui_available(config):
-        return "JIRA_BASE_URL or JIRA_TICKET_URL_TEMPLATE is not configured in project-validation/.env"
+        return "JIRA_BASE_URL, JIRA_URL, or JIRA_TICKET_URL_TEMPLATE is not configured in project-validation/.env"
     if not jira_ui_login_available(config):
         return "JIRA_USERNAME or JIRA_EMAIL plus JIRA_PASSWORD is required for Jira browser login"
     return "Jira UI login prerequisites are available"
 
 
 def page_looks_like_jira_login(page: Page) -> bool:
+    url = page.url or ""
+    title = page.title() if page.title() else ""
     text = body_text(page)
-    return any(token in text for token in JIRA_LOGIN_TEXTS) and (
+    has_login_inputs = (
         page.locator('input[type="email"]').count() > 0
-        or page.locator('input[type="password"]').count() > 0
+        or page.locator('input[name="username"]').count() > 0
         or page.locator('input#username').count() > 0
+        or page.locator('input[type="password"]').count() > 0
     )
+    if "id.atlassian.com/login" in url:
+        return True
+    return has_login_inputs or any(token in f"{title} {text}" for token in JIRA_LOGIN_TEXTS)
 
 
 def ensure_jira_login(page: Page, config: ValidationConfig, timeout_ms: int) -> None:
@@ -58,6 +67,9 @@ def ensure_jira_login(page: Page, config: ValidationConfig, timeout_ms: int) -> 
         lambda: page.locator("body").count() > 0,
         timeout_ms,
     )
+    # Atlassian login hydrates asynchronously in headless Chromium, so give it a brief
+    # settle window before deciding whether the page is already an authenticated issue view.
+    page.wait_for_timeout(5000)
     if not page_looks_like_jira_login(page):
         return
 
@@ -68,7 +80,14 @@ def ensure_jira_login(page: Page, config: ValidationConfig, timeout_ms: int) -> 
         page.locator('input[type="email"]'),
         page.locator('input[name="username"]'),
         page.locator('input#username'),
+        page.get_by_role('textbox'),
     ]
+    wait_for_condition(
+        page,
+        "jira email field visible",
+        lambda: any(locator.count() for locator in email_locators),
+        timeout_ms,
+    )
     active_email = next((locator.first for locator in email_locators if locator.count()), None)
     if active_email is None:
         raise RuntimeError("Jira login page did not expose an email/username field")

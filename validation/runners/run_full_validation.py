@@ -248,14 +248,14 @@ def write_docs(config, recorder: RunRecorder) -> None:
                 "",
                 "## Authentication Model",
                 "",
-                "- Jira UI proof requires JIRA_BASE_URL or JIRA_TICKET_URL_TEMPLATE plus JIRA_USERNAME/JIRA_EMAIL and JIRA_PASSWORD in local `.env`.",
+                "- Jira UI proof requires JIRA_BASE_URL, JIRA_URL, or JIRA_TICKET_URL_TEMPLATE plus JIRA_USERNAME/JIRA_EMAIL and JIRA_PASSWORD in local `.env`.",
                 "- GitHub deployment pages are captured from public workflow and commit pages.",
                 "- ArgoCD, Grafana, and other protected UIs use credentials from local `.env` only.",
                 "- No credentials are stored in `.env.example`.",
                 "",
                 "## Honest Limitation Handling",
                 "",
-                "- If a protected UI cannot be reached because authentication is missing, the framework records a warning instead of faking proof.",
+                "- If a protected UI cannot be reached because authentication is missing or the provider requires MFA, the framework records a warning instead of faking proof.",
                 "- Supporting artifacts may still be recorded, but they are not presented as primary UI screenshots.",
             ]
         ),
@@ -270,7 +270,7 @@ def write_deployment_docs(config, recorder: RunRecorder) -> None:
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
     docs = config.docs_dir
     screenshot_map = _sync_docs_screenshots(config)
-    steps = [step for step in recorder.steps if step.category == "deployment"]
+    steps = [step for step in recorder.steps if step.category in {"deployment", "jira"}]
 
     report_lines = [
         "# Deployment POC Validation Report",

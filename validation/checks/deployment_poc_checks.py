@@ -152,13 +152,21 @@ def validate_consistency(config: ValidationConfig, summary: dict) -> dict:
     _, gitops_root = deployment_roots(config)
     payload = summary["payload"]
     target = payload["target"]
-    expected_runner = config.settings["defaults"]["deployment_poc"]["expected_runner_name"]
-    acceptable_actions = set(config.settings["defaults"]["deployment_poc"]["acceptable_actions"])
+    deployment_settings = config.settings["defaults"]["deployment_poc"]
+    expected_runner = deployment_settings.get("expected_runner_name", "")
+    required_runner_labels = {label.casefold() for label in deployment_settings.get("required_runner_labels", [])}
+    acceptable_actions = set(deployment_settings["acceptable_actions"])
 
     if payload.get("deployment_action") not in acceptable_actions:
         raise RuntimeError(f"Unexpected deployment action: {payload.get('deployment_action')}")
-    if summary.get("runner_name") != expected_runner:
+    if expected_runner and summary.get("runner_name") != expected_runner:
         raise RuntimeError(f"Deployment workflow used unexpected runner: {summary.get('runner_name')}")
+    actual_labels = {str(label).casefold() for label in summary.get("labels", [])}
+    missing_labels = sorted(required_runner_labels - actual_labels)
+    if missing_labels:
+        raise RuntimeError(
+            f"Deployment workflow runner labels are incomplete: missing {', '.join(missing_labels)}"
+        )
 
     shell_run(["git", "fetch", "origin", config.env["DEPLOYMENT_POC_GITOPS_BRANCH"]], cwd=gitops_root)
     gitops_head = shell_run(["git", "rev-parse", f"origin/{config.env['DEPLOYMENT_POC_GITOPS_BRANCH']}"], cwd=gitops_root)

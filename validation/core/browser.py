@@ -32,6 +32,7 @@ class BrowserHarness:
         self.browser = self.playwright.chromium.launch(
             headless=browser_settings["headless"],
             slow_mo=browser_settings.get("slow_mo_ms", 0),
+            args=browser_settings.get("launch_args", []),
         )
         self.context = self.browser.new_context(
             ignore_https_errors=True,
@@ -40,6 +41,7 @@ class BrowserHarness:
             color_scheme=browser_settings.get("color_scheme", "light"),
             locale=browser_settings.get("locale", "en-US"),
             timezone_id=browser_settings.get("timezone_id", "Asia/Calcutta"),
+            user_agent=browser_settings.get("user_agent"),
         )
         return self
 

@@ -3,7 +3,10 @@
 ## `DEP-001` Jira ticket proof
 
 - Status: `WARN`
-- Detail: Real Jira UI proof is not configured in project-validation; no synthetic fallback was used as primary evidence
+- Detail: Jira authentication reached the real Atlassian emailed MFA challenge, but the ticket page itself could not be captured because automated OTP retrieval is blocked by Gmail security.
+- Screenshot: [screenshots/jira/jira-login-challenge.png](screenshots/jira/jira-login-challenge.png)
+
+![Jira login challenge](screenshots/jira/jira-login-challenge.png)
 
 ## `DEP-002` GitHub Actions deployment run summary
 

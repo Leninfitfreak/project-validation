@@ -135,19 +135,43 @@ def run(page: Page, config: ValidationConfig, recorder: RunRecorder) -> None:
             )
             warnings.extend(jira_warnings)
         except Exception as exc:
-            warnings.append(f"Direct Jira browser proof could not be captured: {exc}")
+            jira_warning = f"Direct Jira browser proof could not be captured: {exc}"
+            jira_screenshot = None
+            jira_page_url = page.url or ""
+            if "/login/mfa" in jira_page_url:
+                jira_warning = (
+                    "Direct Jira browser proof could not be captured: Atlassian prompted for an emailed MFA code, "
+                    "so unattended validation could not reach the issue page."
+                )
+                jira_screenshot = "screenshots/jira/jira-login-challenge.png"
+                try:
+                    capture_when_ready(
+                        page,
+                        config.screenshot_dir("jira") / "jira-login-challenge.png",
+                        require_no_loading=False,
+                        verify=lambda: page.title() or page.url,
+                        retries=1,
+                        retry_wait_ms=0,
+                        timeout_ms=timeout,
+                        image_rules=image_rules,
+                        full_page=False,
+                    )
+                except Exception:
+                    jira_screenshot = None
+            warnings.append(jira_warning)
             recorder.add_step(
                 StepResult(
                     "JIRA-001",
                     "jira",
                     "Jira ticket UI evidence",
                     "WARN",
-                    f"Real Jira UI proof could not be captured: {exc}",
+                    jira_warning,
+                    jira_screenshot,
                 )
             )
             jira_review = {
                 "status": "WARN",
-                "summary": str(exc),
+                "summary": jira_warning,
                 "recommendations": [login_flows.jira_ui_prereq_message(config)],
             }
     else:

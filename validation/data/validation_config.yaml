@@ -9,6 +9,9 @@ defaults:
     locale: en-US
     timezone_id: Asia/Calcutta
     slow_mo_ms: 0
+    launch_args:
+      - --disable-blink-features=AutomationControlled
+    user_agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36
   waits:
     timeout_ms: 20000
     long_timeout_ms: 60000
@@ -74,7 +77,14 @@ defaults:
   deployment_poc:
     github_api_base: https://api.github.com
     workflow_job_name: deploy
-    expected_runner_name: leninkart-runner
+    expected_runner_name: leninkar-runner
+    required_runner_labels:
+      - self-hosted
+      - Windows
+      - X64
+      - leninkart
+      - local
+      - dev
     acceptable_actions:
       - deployed
       - already_deployed

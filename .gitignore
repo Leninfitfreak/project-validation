@@ -12,3 +12,4 @@ screenshots/*.jpeg
 screenshots/*.webp
 local-secrets.txt*
 validation-output/
+actions-runner/

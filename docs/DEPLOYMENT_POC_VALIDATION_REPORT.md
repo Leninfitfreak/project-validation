@@ -12,21 +12,28 @@
 ## Latest Validated Deployment
 
 - Jira ticket: `SCRUM-23`
-- Workflow run: `#39`
-- Workflow URL: `https://github.com/Leninfitfreak/deployment-poc/actions/runs/23662061813`
-- Runner: `leninkart-runner`
+- Workflow run: `#46`
+- Workflow URL: `https://github.com/Leninfitfreak/deployment-poc/actions/runs/23683946292`
+- Runner: `leninkar-runner`
 - Deployment action: `deployed`
 - Requested version: `v1`
 - Resolved version: `23599211809`
-- GitOps commit: `12550afe7d657f8af264549185fe4f002b50afbd`
+- GitOps commit: `67f00d07fdbfa49c6db4dc12dbfb5cbd7684b412`
 - GitOps values path: `applications/product-service/helm/values-dev.yaml`
 - ArgoCD app: `dev-product-service`
 - Final sync: `Synced`
 - Final health: `Healthy`
-- Jira proof mode: `unavailable`
-- Supporting artifact: `github-actions://Leninfitfreak/deployment-poc/runs/23662061813/artifacts/6150457838`
+- Jira proof mode: `mfa_challenge`
+- Supporting artifact: `github-actions://Leninfitfreak/deployment-poc/runs/23683946292/artifacts/6158238385`
 
 ## Screenshot Proof
+
+### DEP-001 Jira ticket proof
+
+- Detail: Jira browser navigation succeeded through the hosted Atlassian login, but the session stopped on the emailed MFA challenge page before the ticket UI could be opened.
+- Screenshot: [screenshots/jira/jira-login-challenge.png](screenshots/jira/jira-login-challenge.png)
+
+![Jira login challenge](screenshots/jira/jira-login-challenge.png)
 
 ### DEP-002 GitHub Actions deployment run summary
 
@@ -72,7 +79,7 @@
 
 ## Warnings
 
-- Jira browser UI credentials or ticket URL template are not configured in project-validation.
+- Jira page automation reached Atlassian MFA, but automated OTP retrieval is still blocked by Gmail security. IMAP requires an app password, and browser automation is rejected as an insecure sign-in, so the final ticket UI could not be captured yet.
 
 ## Evidence Model
 
