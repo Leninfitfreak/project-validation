@@ -52,7 +52,6 @@ defaults:
     screenshots:
       application: screenshots/application
       deployment: screenshots/deployment
-      jira: screenshots/jira
       infra: screenshots/infra
       gitops: screenshots/gitops
       secrets: screenshots/secrets

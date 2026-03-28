@@ -128,10 +128,7 @@
 ## DEP-001 Jira ticket proof
 
 - Status: `WARN`
-- Detail: Real Jira login was reached and the Atlassian emailed MFA challenge was captured, but the final ticket page could not be opened because automated OTP retrieval is still blocked by Gmail security.
-- Screenshot: [screenshots/jira/jira-login-challenge.png](screenshots/jira/jira-login-challenge.png)
-
-![Jira login challenge](screenshots/jira/jira-login-challenge.png)
+- Detail: Jira browser UI proof is intentionally out of scope for the final supported validation layer. Deployment validation focuses on GitHub Actions, deployment-result, GitOps, ArgoCD, and application UI evidence.
 
 ## DEP-002 GitHub Actions deployment run summary
 

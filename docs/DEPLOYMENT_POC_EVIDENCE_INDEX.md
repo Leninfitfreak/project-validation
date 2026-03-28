@@ -1,13 +1,5 @@
 # Deployment POC Evidence Index
 
-## `DEP-001` Jira ticket proof
-
-- Status: `WARN`
-- Detail: Jira authentication reached the real Atlassian emailed MFA challenge, but the ticket page itself could not be captured because automated OTP retrieval is blocked by Gmail security.
-- Screenshot: [screenshots/jira/jira-login-challenge.png](screenshots/jira/jira-login-challenge.png)
-
-![Jira login challenge](screenshots/jira/jira-login-challenge.png)
-
 ## `DEP-002` GitHub Actions deployment run summary
 
 - Status: `PASS`

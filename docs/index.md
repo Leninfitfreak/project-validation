@@ -5,7 +5,7 @@ This site contains the current end-to-end LeninKart platform evidence generated 
 ## Covered Areas
 
 - Application journey: signup, login, product creation, buy flow, order history
-- Deployment POC proof: Jira ticket evidence, GitHub Actions run, deployment result, GitOps commit, ArgoCD sync and health
+- Deployment POC proof: GitHub Actions run, deployment result, GitOps commit, ArgoCD sync and health, and application reachability
 - GitOps proof: ArgoCD login, applications list, application detail
 - Secrets proof: Vault access and safe secret-path artifact
 - Messaging proof: external Kafka runtime artifact and Kafka dashboard

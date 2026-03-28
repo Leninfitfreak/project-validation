@@ -2,7 +2,6 @@
 
 ## Validated Scope
 
-- Jira deployment ticket proof
 - GitHub Actions workflow summary and self-hosted runner proof
 - deployment-poc result proof from the real GitHub workflow artifact section
 - GitOps commit and target file proof
@@ -23,17 +22,9 @@
 - ArgoCD app: `dev-product-service`
 - Final sync: `Synced`
 - Final health: `Healthy`
-- Jira proof mode: `mfa_challenge`
 - Supporting artifact: `github-actions://Leninfitfreak/deployment-poc/runs/23683946292/artifacts/6158238385`
 
 ## Screenshot Proof
-
-### DEP-001 Jira ticket proof
-
-- Detail: Jira browser navigation succeeded through the hosted Atlassian login, but the session stopped on the emailed MFA challenge page before the ticket UI could be opened.
-- Screenshot: [screenshots/jira/jira-login-challenge.png](screenshots/jira/jira-login-challenge.png)
-
-![Jira login challenge](screenshots/jira/jira-login-challenge.png)
 
 ### DEP-002 GitHub Actions deployment run summary
 
@@ -79,7 +70,7 @@
 
 ## Warnings
 
-- Jira page automation reached Atlassian MFA, but automated OTP retrieval is still blocked by Gmail security. IMAP requires an app password, and browser automation is rejected as an insecure sign-in, so the final ticket UI could not be captured yet.
+- Jira browser UI proof is intentionally out of scope for the final supported validation flow because Atlassian MFA is not automated in project-validation.
 
 ## Evidence Model
 

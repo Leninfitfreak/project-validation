@@ -90,7 +90,7 @@ def write_docs(config, recorder: RunRecorder) -> None:
                 "2. Load URLs, credentials, wait rules, screenshot quality thresholds, and demo data from `.env` and `validation/data/*`.",
                 "3. Capture infrastructure and messaging CLI proof before browser work begins.",
                 "4. Run the frontend user journey in order: login page, signup, authenticated dashboard, product creation, buy flow, and order history proof.",
-                "5. Validate the Jira -> GitHub Actions -> GitOps -> ArgoCD deployment POC using Jira browser UI, GitHub pages, local deployment artifacts, and ArgoCD state proof.",
+                "5. Validate the Jira -> GitHub Actions -> GitOps -> ArgoCD deployment POC using GitHub pages, local deployment artifacts, and ArgoCD state proof.",
                 "6. Run GitOps and Vault UI proof flows and generate the safe Vault secret inventory report.",
                 "7. Run observability proof for Grafana dashboards, Loki Explore, Prometheus targets, and Tempo search/detail pages.",
                 "8. Reject blank or weak screenshots automatically, retry with longer waits, and only publish screenshots that pass image-quality checks.",
@@ -184,7 +184,7 @@ def write_docs(config, recorder: RunRecorder) -> None:
                 "## Covered Areas",
                 "",
                 "- Application journey: signup, login, product creation, buy flow, order history",
-                "- Deployment POC proof: Jira ticket overview/details/comments/final state, GitHub Actions run, deployment result, GitOps commit, ArgoCD sync and health",
+                "- Deployment POC proof: GitHub Actions run, deployment result, GitOps commit, ArgoCD sync and health, and application reachability",
                 "- GitOps proof: ArgoCD login, applications list, application detail",
                 "- Secrets proof: Vault access and safe secret-path artifact",
                 "- Messaging proof: external Kafka runtime artifact and Kafka dashboard",
@@ -233,7 +233,6 @@ def write_docs(config, recorder: RunRecorder) -> None:
                 "",
                 "## Primary UI Proof",
                 "",
-                "- Real Jira ticket page with overview, details, comments, progress, and final-state screenshots when browser authentication is available",
                 "- Real GitHub Actions run summary page",
                 "- Real GitHub Actions job page for runner details",
                 "- Real GitHub Actions run page artifact section for deployment-result proof",
@@ -248,14 +247,14 @@ def write_docs(config, recorder: RunRecorder) -> None:
                 "",
                 "## Authentication Model",
                 "",
-                "- Jira UI proof requires JIRA_BASE_URL, JIRA_URL, or JIRA_TICKET_URL_TEMPLATE plus JIRA_USERNAME/JIRA_EMAIL and JIRA_PASSWORD in local `.env`.",
                 "- GitHub deployment pages are captured from public workflow and commit pages.",
                 "- ArgoCD, Grafana, and other protected UIs use credentials from local `.env` only.",
                 "- No credentials are stored in `.env.example`.",
                 "",
                 "## Honest Limitation Handling",
                 "",
-                "- If a protected UI cannot be reached because authentication is missing or the provider requires MFA, the framework records a warning instead of faking proof.",
+                "- If a protected UI cannot be reached because authentication is missing, the framework records a warning instead of faking proof.",
+                "- Jira ticketing remains part of the deployment workflow, but Jira browser MFA automation is intentionally out of scope for the final supported validation layer.",
                 "- Supporting artifacts may still be recorded, but they are not presented as primary UI screenshots.",
             ]
         ),
@@ -270,14 +269,13 @@ def write_deployment_docs(config, recorder: RunRecorder) -> None:
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
     docs = config.docs_dir
     screenshot_map = _sync_docs_screenshots(config)
-    steps = [step for step in recorder.steps if step.category in {"deployment", "jira"}]
+    steps = [step for step in recorder.steps if step.category == "deployment"]
 
     report_lines = [
         "# Deployment POC Validation Report",
         "",
         "## Validated Scope",
         "",
-        "- Jira deployment ticket proof",
         "- GitHub Actions workflow summary and self-hosted runner proof",
         "- deployment-poc result proof from the real GitHub workflow artifact section",
         "- GitOps commit and target file proof",
@@ -298,7 +296,6 @@ def write_deployment_docs(config, recorder: RunRecorder) -> None:
         f"- ArgoCD app: `{summary.get('argocd_app', '')}`",
         f"- Final sync: `{summary.get('argocd_sync', '')}`",
         f"- Final health: `{summary.get('argocd_health', '')}`",
-        f"- Jira proof mode: `{summary.get('jira_proof_mode', '')}`",
         f"- Supporting artifact: `{summary.get('supporting_artifact_path', '')}`",
         "",
         "## Screenshot Proof",

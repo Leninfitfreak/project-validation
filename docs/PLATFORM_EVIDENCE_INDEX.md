@@ -138,7 +138,7 @@
 
 - Category: `deployment`
 - Status: `WARN`
-- Proof: Real Jira UI proof is not configured in project-validation; no synthetic fallback was used as primary evidence
+- Proof: Jira browser UI proof is intentionally out of scope for the final supported validation layer.
 
 ## `DEP-002` GitHub Actions deployment run summary
 

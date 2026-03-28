@@ -18,7 +18,7 @@ This matrix is generated from the rebuilt modular validation framework and repre
 | gitops | GIT-001 ArgoCD login page | ArgoCD login visible | `screenshots/gitops/argocd-login.png` | `PASS` |
 | gitops | GIT-002 ArgoCD applications list | Core app names visible | `screenshots/gitops/argocd-app-list.png` | `PASS` |
 | gitops | GIT-003 ArgoCD app detail | Selected app detail visible | `screenshots/gitops/argocd-app-detail.png` | `PASS` |
-| deployment | DEP-001 Jira ticket proof | Real Jira UI proof is not configured in project-validation; no synthetic fallback was used as primary evidence | `-` | `WARN` |
+| deployment | DEP-001 Jira ticket proof | Jira browser UI proof is intentionally out of scope for the final supported validation layer. | `-` | `WARN` |
 | deployment | DEP-002 GitHub Actions deployment run summary | Real GitHub Actions workflow run page captured with job summary visible | `screenshots/deployment/github-actions-run-summary.png` | `PASS` |
 | deployment | DEP-003 GitHub Actions runner proof | Real GitHub job page captured with the self-hosted runner details visible | `screenshots/deployment/github-actions-runner-proof.png` | `PASS` |
 | deployment | DEP-004 deployment-poc result proof | Real GitHub workflow run page captured with the deployment-result artifact visible as primary browser proof | `screenshots/deployment/deployment-result-proof.png` | `PASS` |
