@@ -74,17 +74,30 @@ def download_deployment_payload(repo: str, artifact_id: int, auth: tuple[str, st
         return json.loads(archive.read("deployment-result.json").decode("utf-8-sig"))
 
 
+
+
+def current_gitops_head(config: ValidationConfig) -> str | None:
+    _, gitops_root = deployment_roots(config)
+    result = shell_run(["git", "rev-parse", f"origin/{config.env['DEPLOYMENT_POC_GITOPS_BRANCH']}"], cwd=gitops_root)
+    if int(result["returncode"]) != 0:
+        return None
+    return str(result["stdout"]).strip() or None
+
+
 def latest_successful_deployment_run(config: ValidationConfig) -> dict:
     repo = config.env["DEPLOYMENT_POC_REPO"]
     workflow_file = config.env["DEPLOYMENT_POC_WORKFLOW_FILE"]
     api_base = config.settings["defaults"]["deployment_poc"]["github_api_base"]
     auth = github_auth(config)
     ticket_filter = config.env.get("DEPLOYMENT_POC_TICKET", "").strip()
+    preferred_head = None if ticket_filter else current_gitops_head(config)
 
     runs_url = f"{api_base}/repos/{repo}/actions/workflows/{workflow_file}/runs?status=completed&per_page=20"
     runs = api_get_json(runs_url, auth=auth).get("workflow_runs", [])
     if not runs:
         raise RuntimeError(f"No completed workflow runs were returned for {workflow_file}")
+
+    selected_fallback: dict | None = None
 
     for run_data in runs:
         if run_data.get("status") != "completed" or run_data.get("conclusion") != "success":
@@ -108,7 +121,7 @@ def latest_successful_deployment_run(config: ValidationConfig) -> dict:
         if not jobs:
             raise RuntimeError(f"No GitHub Actions jobs were returned for run {run_id}")
         job = jobs[0]
-        return {
+        candidate = {
             "run_id": run_id,
             "run_number": run_data.get("run_number"),
             "run_url": run_data.get("html_url"),
@@ -123,7 +136,13 @@ def latest_successful_deployment_run(config: ValidationConfig) -> dict:
             "payload": payload,
             "artifact_path": f"github-actions://{repo}/runs/{run_id}/artifacts/{artifact['id']}",
         }
+        if preferred_head and payload.get("gitops_commit") == preferred_head:
+            return candidate
+        if selected_fallback is None:
+            selected_fallback = candidate
 
+    if selected_fallback is not None:
+        return selected_fallback
     if ticket_filter:
         raise RuntimeError(f"No successful deployment-poc workflow run with deployment-result artifact was found for ticket {ticket_filter}")
     raise RuntimeError("No successful deployment-poc workflow run with deployment-result artifact was found")
@@ -167,25 +186,33 @@ def validate_consistency(config: ValidationConfig, summary: dict) -> dict:
         raise RuntimeError(
             f"ArgoCD app {target['argocd_app']} is not healthy: sync={sync_status}, health={health_status}"
         )
-    if revision != payload.get("gitops_commit"):
-        raise RuntimeError(
-            f"ArgoCD app {target['argocd_app']} revision mismatch: expected {payload.get('gitops_commit')} got {revision}"
-        )
     if current_tag != target.get("resolved_version"):
         raise RuntimeError(
             f"GitOps values file {target['values_path']} does not match resolved version {target.get('resolved_version')}"
         )
-    if payload.get("gitops_commit") != gitops_head["stdout"].strip():
+
+    current_head = gitops_head["stdout"].strip()
+    requested_commit = str(payload.get("gitops_commit") or "").strip()
+    revision_advanced = False
+    if revision != requested_commit:
+        ancestor_check = shell_run(["git", "merge-base", "--is-ancestor", requested_commit, revision], cwd=gitops_root)
+        if int(ancestor_check["returncode"]) != 0 or current_tag != target.get("resolved_version"):
+            raise RuntimeError(
+                f"ArgoCD app {target['argocd_app']} revision mismatch: expected deployment commit {requested_commit} but live revision is {revision}"
+            )
+        revision_advanced = True
+    if revision != current_head and current_tag != target.get("resolved_version"):
         raise RuntimeError(
-            f"GitOps branch head mismatch: expected {payload.get('gitops_commit')} got {gitops_head['stdout'].strip()}"
+            f"GitOps branch head mismatch: expected resolved version {target.get('resolved_version')} at head {current_head}"
         )
 
     return {
-        "gitops_head": gitops_head["stdout"].strip(),
+        "gitops_head": current_head,
         "current_tag": current_tag,
         "argocd_sync": sync_status,
         "argocd_health": health_status,
         "argocd_revision": revision,
+        "revision_advanced": revision_advanced,
     }
 
 

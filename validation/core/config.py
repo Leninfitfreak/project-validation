@@ -48,6 +48,7 @@ def load_config(root: Path) -> ValidationConfig:
     env.setdefault("DEPLOYMENT_POC_VALUES_PATH", "")
     env.setdefault("DEPLOYMENT_POC_RUNNER_NAME", "leninkart-runner")
     env.setdefault("JIRA_TICKET_URL_TEMPLATE", "")
+    env.setdefault("JIRA_USERNAME", "")
     env.setdefault("INGRESS_URL", "http://127.0.0.1/")
     env.setdefault("ARGOCD_URL", "http://127.0.0.1:8085")
     env.setdefault("VAULT_URL", "http://127.0.0.1:8205")

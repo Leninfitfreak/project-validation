@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from contextlib import ExitStack
-from pathlib import Path
 
 from playwright.sync_api import BrowserContext, Page, sync_playwright
 
@@ -18,7 +17,7 @@ class BrowserHarness:
         self.context: BrowserContext | None = None
 
     def __enter__(self) -> "BrowserHarness":
-        for port_name, port_spec in self.config.settings["defaults"]["ports"].items():
+        for _, port_spec in self.config.settings["defaults"]["ports"].items():
             self.stack.enter_context(
                 PortForward(
                     PortForwardSpec(
@@ -37,6 +36,10 @@ class BrowserHarness:
         self.context = self.browser.new_context(
             ignore_https_errors=True,
             viewport=browser_settings["viewport"],
+            device_scale_factor=browser_settings.get("device_scale_factor", 1),
+            color_scheme=browser_settings.get("color_scheme", "light"),
+            locale=browser_settings.get("locale", "en-US"),
+            timezone_id=browser_settings.get("timezone_id", "Asia/Calcutta"),
         )
         return self
 
@@ -48,4 +51,6 @@ class BrowserHarness:
     def new_page(self) -> Page:
         if not self.context:
             raise RuntimeError("browser harness not initialized")
-        return self.context.new_page()
+        page = self.context.new_page()
+        page.set_default_timeout(self.config.settings["defaults"]["waits"]["timeout_ms"])
+        return page

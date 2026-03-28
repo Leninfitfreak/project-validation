@@ -39,14 +39,20 @@ def main() -> None:
     manifest: list[dict[str, str]] = []
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        context = browser.new_context(ignore_https_errors=True, viewport={"width": 1600, "height": 1200})
+        context = browser.new_context(
+            ignore_https_errors=True,
+            viewport={"width": 1920, "height": 1080},
+            device_scale_factor=2,
+            color_scheme="light",
+            locale="en-US",
+        )
         page = context.new_page()
 
         for target in load_targets():
             output_path = SCREENSHOT_DIR / str(target["screenshot"])
             docs_output_path = DOCS_SCREENSHOT_DIR / str(target["screenshot"])
             wait_for_page_content(page, target)
-            page.screenshot(path=str(output_path), full_page=True)
+            page.screenshot(path=str(output_path), full_page=False, animations="disabled", caret="hide", scale="device")
             assert_meaningful_image(output_path, None)
             shutil.copy2(output_path, docs_output_path)
             manifest.append(

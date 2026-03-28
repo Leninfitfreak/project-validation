@@ -4,10 +4,13 @@ import shutil
 from pathlib import Path
 from typing import Callable
 
-from playwright.sync_api import Page
+from playwright.sync_api import Locator, Page
 
 from .image_checks import ImageCheckResult, assert_meaningful_image
 from .waits import wait_for_no_loading
+
+
+CaptureTarget = Locator | Callable[[], Locator] | None
 
 
 def _debug_dir_for(path: Path) -> Path:
@@ -28,6 +31,8 @@ def capture_when_ready(
     retry_wait_ms: int = 1500,
     timeout_ms: int = 20000,
     image_rules: dict[str, float | int] | None = None,
+    target: CaptureTarget = None,
+    full_page: bool = False,
 ) -> ImageCheckResult:
     last_error: Exception | None = None
     debug_dir = _debug_dir_for(path)
@@ -40,8 +45,26 @@ def capture_when_ready(
                 wait_for_no_loading(page, timeout_ms)
             if verify:
                 verify()
+
+            capture_target = target() if callable(target) else target
             path.parent.mkdir(parents=True, exist_ok=True)
-            page.screenshot(path=str(temp_path), full_page=True)
+            if capture_target is not None:
+                capture_target.first.wait_for(state="visible", timeout=timeout_ms)
+                capture_target.first.scroll_into_view_if_needed(timeout=timeout_ms)
+                page.wait_for_timeout(350)
+                capture_target.first.screenshot(
+                    path=str(temp_path),
+                    animations="disabled",
+                    caret="hide",
+                )
+            else:
+                page.screenshot(
+                    path=str(temp_path),
+                    full_page=full_page,
+                    animations="disabled",
+                    caret="hide",
+                    scale="device",
+                )
             result = assert_meaningful_image(temp_path, image_rules)
             shutil.move(str(temp_path), str(path))
             return result

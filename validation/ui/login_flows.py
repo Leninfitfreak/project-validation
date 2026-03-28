@@ -7,10 +7,19 @@ from validation.core.waits import wait_for_condition
 from validation.ui.playwright_helpers import body_text, click_if_visible
 
 
+JIRA_LOGIN_TEXTS = ["Log in", "Continue", "Atlassian", "Sign up"]
+
+
 def jira_ui_available(config: ValidationConfig) -> bool:
     template = (config.env.get("JIRA_TICKET_URL_TEMPLATE") or "").strip()
     base = (config.env.get("JIRA_BASE_URL") or "").strip()
     return bool(template or base)
+
+
+def jira_ui_login_available(config: ValidationConfig) -> bool:
+    username = (config.env.get("JIRA_USERNAME") or config.env.get("JIRA_EMAIL") or "").strip()
+    password = (config.env.get("JIRA_PASSWORD") or "").strip()
+    return jira_ui_available(config) and bool(username and password)
 
 
 def jira_ticket_url(config: ValidationConfig, ticket: str) -> str:
@@ -20,11 +29,37 @@ def jira_ticket_url(config: ValidationConfig, ticket: str) -> str:
     return config.env["JIRA_BASE_URL"].rstrip("/") + f"/browse/{ticket}"
 
 
-def try_login_jira(page: Page, config: ValidationConfig, timeout_ms: int) -> bool:
-    email = (config.env.get("JIRA_EMAIL") or config.env.get("JIRA_USERNAME") or "").strip()
+def jira_ui_prereq_message(config: ValidationConfig) -> str:
+    if not jira_ui_available(config):
+        return "JIRA_BASE_URL or JIRA_TICKET_URL_TEMPLATE is not configured in project-validation/.env"
+    if not jira_ui_login_available(config):
+        return "JIRA_USERNAME or JIRA_EMAIL plus JIRA_PASSWORD is required for Jira browser login"
+    return "Jira UI login prerequisites are available"
+
+
+def page_looks_like_jira_login(page: Page) -> bool:
+    text = body_text(page)
+    return any(token in text for token in JIRA_LOGIN_TEXTS) and (
+        page.locator('input[type="email"]').count() > 0
+        or page.locator('input[type="password"]').count() > 0
+        or page.locator('input#username').count() > 0
+    )
+
+
+def ensure_jira_login(page: Page, config: ValidationConfig, timeout_ms: int) -> None:
+    username = (config.env.get("JIRA_USERNAME") or config.env.get("JIRA_EMAIL") or "").strip()
     password = (config.env.get("JIRA_PASSWORD") or "").strip()
-    if not email or not password:
-        return False
+    if not username or not password:
+        raise RuntimeError(jira_ui_prereq_message(config))
+
+    wait_for_condition(
+        page,
+        "jira page visible",
+        lambda: page.locator("body").count() > 0,
+        timeout_ms,
+    )
+    if not page_looks_like_jira_login(page):
+        return
 
     click_if_visible(page.locator('button:has-text("Continue with email")'))
     click_if_visible(page.locator('button:has-text("Continue")'))
@@ -34,13 +69,10 @@ def try_login_jira(page: Page, config: ValidationConfig, timeout_ms: int) -> boo
         page.locator('input[name="username"]'),
         page.locator('input#username'),
     ]
-    for locator in email_locators:
-        if locator.count():
-            locator.first.fill(email)
-            break
-    else:
-        return False
-
+    active_email = next((locator.first for locator in email_locators if locator.count()), None)
+    if active_email is None:
+        raise RuntimeError("Jira login page did not expose an email/username field")
+    active_email.fill(username)
     click_if_visible(page.locator('button:has-text("Continue")'))
     click_if_visible(page.locator('input#login-submit'))
 
@@ -55,15 +87,19 @@ def try_login_jira(page: Page, config: ValidationConfig, timeout_ms: int) -> boo
         lambda: any(locator.count() for locator in password_locators),
         timeout_ms,
     )
-    for locator in password_locators:
-        if locator.count():
-            locator.first.fill(password)
-            break
-
+    active_password = next((locator.first for locator in password_locators if locator.count()), None)
+    if active_password is None:
+        raise RuntimeError("Jira login page did not expose a password field")
+    active_password.fill(password)
     click_if_visible(page.locator('button:has-text("Log in")'))
     click_if_visible(page.locator('button:has-text("Continue")'))
     click_if_visible(page.locator('input#login-submit'))
-    return True
+    wait_for_condition(
+        page,
+        "jira issue page visible after login",
+        lambda: not page_looks_like_jira_login(page),
+        timeout_ms,
+    )
 
 
 def ensure_argocd_login(page: Page, config: ValidationConfig, timeout_ms: int) -> None:

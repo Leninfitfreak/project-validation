@@ -62,6 +62,9 @@ python -m validation.runners.run_vault_validation
 
 Deployment and platform presentation proof now prioritizes real browser UI over synthetic artifacts.
 
+- screenshots are captured at high resolution with a 1920x1080 viewport and device scale factor 2 for sharper evidence
+- Jira proof supports authenticated browser login and stage-aware capture for overview, details, comments, progress, and final state when Jira URL and credentials are available in `.env`
+- the framework reviews Jira ticket professionalism and flags weak summary/metadata patterns with a preferred template for future tickets
 - GitHub Actions workflow proof is captured from the real public workflow and job pages
 - GitOps proof is captured from the real GitHub commit UI
 - ArgoCD proof is captured from the real application page

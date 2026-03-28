@@ -19,10 +19,17 @@ This validation framework now treats browser-captured UI as the primary deployme
 
 ## Authentication Model
 
-- Jira UI proof requires a browser-authenticated Jira session or local Jira browser credentials in `.env`.
+- Jira UI proof requires `JIRA_BASE_URL` or `JIRA_TICKET_URL_TEMPLATE` plus local Jira browser credentials in `.env` using `JIRA_USERNAME` or `JIRA_EMAIL` with `JIRA_PASSWORD`.
 - GitHub deployment pages are captured from public workflow and commit pages.
 - ArgoCD, Grafana, and other protected UIs use credentials from local `.env` only.
 - No credentials are stored in `.env.example`.
+
+## Screenshot Quality And Coverage
+
+- Browser evidence uses a 1920x1080 viewport with device scale factor 2 for sharper screenshots.
+- Deployment proof now prefers panel or element captures over giant full-page screenshots when readability is more important.
+- Jira coverage supports overview, metadata/details, comments/activity, progress, and final-state screenshots when the ticket and session are available.
+- Jira tickets are also reviewed for summary clarity, metadata completeness, and professional request formatting.
 
 ## Honest Limitation Handling
 
