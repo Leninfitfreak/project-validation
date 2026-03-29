@@ -4,12 +4,14 @@ This validation framework now treats browser-captured UI as the primary deployme
 
 ## Primary UI Proof
 
-- Real GitHub Actions run summary page
+- Real service CI workflow page for latest-tag publish proof
+- Real deployment workflow run summary page
 - Real GitHub Actions job page for runner details
-- Real GitHub Actions run page artifact section for deployment-result proof
+- Real latest_tags.yaml GitHub file page
 - Real public GitOps commit page
 - Real ArgoCD application page
 - Real LeninKart application page
+- Real Jira issue page when local Jira browser auth succeeds
 
 ## Supporting Evidence
 
@@ -18,12 +20,12 @@ This validation framework now treats browser-captured UI as the primary deployme
 
 ## Authentication Model
 
-- GitHub deployment pages are captured from public workflow and commit pages.
-- ArgoCD, Grafana, and other protected UIs use credentials from local `.env` only.
+- GitHub deployment pages are captured from real workflow, file, and commit pages.
+- ArgoCD, Grafana, Jira, and other protected UIs use credentials from local `.env` only.
 - No credentials are stored in `.env.example`.
 
 ## Honest Limitation Handling
 
 - If a protected UI cannot be reached because authentication is missing, the framework records a warning instead of faking proof.
-- Jira ticketing remains part of the deployment workflow, but Jira browser MFA automation is intentionally out of scope for the final supported validation layer.
+- Jira issue UI proof is attempted only when browser credentials are configured and the live login succeeds.
 - Supporting artifacts may still be recorded, but they are not presented as primary UI screenshots.

@@ -90,7 +90,7 @@ def write_docs(config, recorder: RunRecorder) -> None:
                 "2. Load URLs, credentials, wait rules, screenshot quality thresholds, and demo data from `.env` and `validation/data/*`.",
                 "3. Capture infrastructure and messaging CLI proof before browser work begins.",
                 "4. Run the frontend user journey in order: login page, signup, authenticated dashboard, product creation, buy flow, and order history proof.",
-                "5. Validate the Jira -> GitHub Actions -> GitOps -> ArgoCD deployment POC using GitHub pages, local deployment artifacts, and ArgoCD state proof.",
+                "5. Validate the latest-tag deployment path: service CI metadata publish, Jira -> deployment-poc resolution, GitOps commit, ArgoCD state, and application reachability proof.",
                 "6. Run GitOps and Vault UI proof flows and generate the safe Vault secret inventory report.",
                 "7. Run observability proof for Grafana dashboards, Loki Explore, Prometheus targets, and Tempo search/detail pages.",
                 "8. Reject blank or weak screenshots automatically, retry with longer waits, and only publish screenshots that pass image-quality checks.",
@@ -233,12 +233,14 @@ def write_docs(config, recorder: RunRecorder) -> None:
                 "",
                 "## Primary UI Proof",
                 "",
-                "- Real GitHub Actions run summary page",
+                "- Real service CI workflow page for latest-tag publish proof",
+                "- Real deployment workflow run summary page",
                 "- Real GitHub Actions job page for runner details",
-                "- Real GitHub Actions run page artifact section for deployment-result proof",
+                "- Real latest_tags.yaml GitHub file page",
                 "- Real public GitOps commit page",
                 "- Real ArgoCD application page",
                 "- Real LeninKart application page",
+                "- Real Jira issue page when local Jira browser auth succeeds",
                 "",
                 "## Supporting Evidence",
                 "",
@@ -247,14 +249,14 @@ def write_docs(config, recorder: RunRecorder) -> None:
                 "",
                 "## Authentication Model",
                 "",
-                "- GitHub deployment pages are captured from public workflow and commit pages.",
-                "- ArgoCD, Grafana, and other protected UIs use credentials from local `.env` only.",
+                "- GitHub deployment pages are captured from real workflow, file, and commit pages.",
+                "- ArgoCD, Grafana, Jira, and other protected UIs use credentials from local `.env` only.",
                 "- No credentials are stored in `.env.example`.",
                 "",
                 "## Honest Limitation Handling",
                 "",
                 "- If a protected UI cannot be reached because authentication is missing, the framework records a warning instead of faking proof.",
-                "- Jira ticketing remains part of the deployment workflow, but Jira browser MFA automation is intentionally out of scope for the final supported validation layer.",
+                "- Jira issue UI proof is attempted only when browser credentials are configured and the live login succeeds.",
                 "- Supporting artifacts may still be recorded, but they are not presented as primary UI screenshots.",
             ]
         ),
@@ -276,6 +278,9 @@ def write_deployment_docs(config, recorder: RunRecorder) -> None:
         "",
         "## Validated Scope",
         "",
+        "- Service CI latest-tag publish proof",
+        "- latest_tags.yaml metadata proof",
+        "- Jira issue browser proof when available",
         "- GitHub Actions workflow summary and self-hosted runner proof",
         "- deployment-poc result proof from the real GitHub workflow artifact section",
         "- GitOps commit and target file proof",
@@ -285,17 +290,36 @@ def write_deployment_docs(config, recorder: RunRecorder) -> None:
         "## Latest Validated Deployment",
         "",
         f"- Jira ticket: `{summary.get('jira_ticket', '')}`",
+        f"- Jira ticket URL: `{summary.get('jira_ticket_url', '')}`",
+        f"- Jira final status: `{summary.get('jira_issue_status', '')}`",
+        f"- Jira comments captured: `{summary.get('jira_comments_total', '')}`",
+        f"- Jira progress stages: `{', '.join(summary.get('jira_posted_progress_stages', []) or [])}`",
         f"- Workflow run: `#{summary.get('run_number', '')}`",
         f"- Workflow URL: `{summary.get('run_url', '')}`",
         f"- Runner: `{summary.get('runner_name', '')}`",
         f"- Deployment action: `{summary.get('deployment_action', '')}`",
         f"- Requested version: `{summary.get('requested_version', '')}`",
         f"- Resolved version: `{summary.get('resolved_version', '')}`",
+        f"- Version source: `{summary.get('version_source', '')}`",
+        f"- Version reference: `{summary.get('version_reference', '')}`",
+        f"- Image repository: `{summary.get('image_repository', '')}`",
+        f"- latest_tags file: `{summary.get('latest_tags_file', '')}`",
+        f"- latest_tags value: `{summary.get('latest_tag_value', '')}`",
+        f"- latest_tags updated at: `{summary.get('latest_tag_updated_at', '')}`",
+        f"- latest_tags source repo: `{summary.get('latest_tag_source_repo', '')}`",
+        f"- latest_tags source branch: `{summary.get('latest_tag_source_branch', '')}`",
+        f"- Expected fresh latest-tag service: `{summary.get('expected_latest_service', '')}`",
+        f"- Expected fresh latest-tag value: `{summary.get('expected_latest_value', '')}`",
+        f"- Expected latest-tag match: `{summary.get('expected_latest_match', '')}`",
         f"- GitOps commit: `{summary.get('gitops_commit', '')}`",
         f"- GitOps values path: `{summary.get('values_path', '')}`",
         f"- ArgoCD app: `{summary.get('argocd_app', '')}`",
         f"- Final sync: `{summary.get('argocd_sync', '')}`",
         f"- Final health: `{summary.get('argocd_health', '')}`",
+        f"- Service CI proof run: `{(summary.get('service_ci_run') or {}).get('run_url', '')}`",
+        f"- Service CI metadata contract: `{(summary.get('service_ci_contract') or {}).get('direct_gitops_update_removed', '')}`",
+        f"- Fresh orchestration context: `{summary.get('orchestration', {})}`",
+        f"- Jira UI status: `{summary.get('jira_ui_status', '')}`",
         f"- Supporting artifact: `{summary.get('supporting_artifact_path', '')}`",
         "",
         "## Screenshot Proof",
@@ -484,6 +508,10 @@ def main() -> int:
     messaging_flow.run(config, recorder)
 
     with BrowserHarness(config) as browser:
+        deployment_page = browser.new_page()
+        deployment_flow.run(deployment_page, config, recorder)
+        deployment_page.close()
+
         app_page = browser.new_page()
         app_auth_flow.run(app_page, config, recorder)
         products = product_flow.run(app_page, config, recorder)
@@ -493,10 +521,6 @@ def main() -> int:
         gitops_page = browser.new_page()
         gitops_flow.run(gitops_page, config, recorder)
         gitops_page.close()
-
-        deployment_page = browser.new_page()
-        deployment_flow.run(deployment_page, config, recorder)
-        deployment_page.close()
 
         vault_page = browser.new_page()
         vault_flow.run(vault_page, config, recorder)

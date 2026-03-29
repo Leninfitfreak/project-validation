@@ -1,5 +1,27 @@
 # Deployment POC Evidence Index
 
+## `DEP-001` Service CI latest tag publish proof
+
+- Status: `PASS`
+- Detail: Real GitHub Actions run page shows the service CI workflow that published the latest tag metadata used by deployment-poc.
+- Screenshot: [screenshots/deployment/service-ci-latest-tag-publish.png](screenshots/deployment/service-ci-latest-tag-publish.png)
+
+![Service CI latest tag publish proof](screenshots/deployment/service-ci-latest-tag-publish.png)
+
+## `DEP-001A` Latest tag metadata proof
+
+- Status: `FAIL`
+- Detail: Fresh service CI produced latest tag 23700292848 for product-service, but latest_tags.yaml still shows 23599512382.
+- Screenshot: [screenshots/deployment/latest-tags-metadata-proof.png](screenshots/deployment/latest-tags-metadata-proof.png)
+
+![Latest tag metadata proof](screenshots/deployment/latest-tags-metadata-proof.png)
+
+## `DEP-001B` Jira lifecycle API proof
+
+- Status: `PASS`
+- Detail: Fresh Jira ticket creation, progress comments, and final completed status were verified via Jira REST API.
+- Artifact: `artifacts/jira-lifecycle-proof.json`
+
 ## `DEP-002` GitHub Actions deployment run summary
 
 - Status: `PASS`

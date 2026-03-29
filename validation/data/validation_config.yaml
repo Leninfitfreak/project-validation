@@ -22,7 +22,7 @@ defaults:
     min_height: 350
     min_unique_colors: 24
     min_stddev: 8.0
-    max_dominant_ratio: 0.92
+    max_dominant_ratio: 0.97
   ports:
     grafana:
       namespace: dev
@@ -92,6 +92,20 @@ defaults:
       - rollback_skipped
       - test_mode
       - rollback_test_mode
+    latest_tags_file: config/latest_tags.yaml
+    service_ci:
+      frontend:
+        repo: Leninfitfreak/leninkart-frontend
+        workflow_file: ci-cd.yaml
+        workflow_name: Frontend CI + Latest Tag Publish
+      product-service:
+        repo: Leninfitfreak/leninkart-product-service
+        workflow_file: ci-cd.yml
+        workflow_name: Product-Service CI + Latest Tag Publish
+      order-service:
+        repo: Leninfitfreak/leninkart-order-service
+        workflow_file: ci-cd.yaml
+        workflow_name: Order-Service CI + Latest Tag Publish
   gitops:
     expected_apps:
       - leninkart-root

@@ -20,7 +20,7 @@ This site contains the current end-to-end LeninKart platform evidence generated 
 ## Category Summary
 
 - `application`: 8 captured step(s)
-- `deployment`: 7 captured step(s)
+- `deployment`: 9 captured step(s)
 - `gitops`: 3 captured step(s)
 - `infra`: 1 captured step(s)
 - `messaging`: 2 captured step(s)

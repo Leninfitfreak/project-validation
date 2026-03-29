@@ -16,4 +16,4 @@ The previous `project-validation` implementation was cleaned before rebuilding t
 - Legacy SigNoz, DeepObserver, and observer-stack validation logic is excluded from the rebuilt framework.
 - Final screenshots are produced only from the current run.
 - Retry attempts are isolated under `artifacts/debug-retries/`.
-- Current generated step count: `38`
+- Current generated step count: `40`

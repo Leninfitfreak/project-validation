@@ -36,6 +36,14 @@
 
 ## Deployment
 
+### DEP-001 Service CI latest tag publish proof
+
+![Service CI latest tag publish proof](screenshots/deployment/service-ci-latest-tag-publish.png)
+
+### DEP-001A Latest tag metadata proof
+
+![Latest tag metadata proof](screenshots/deployment/latest-tags-metadata-proof.png)
+
 ### DEP-002 GitHub Actions deployment run summary
 
 ![GitHub Actions deployment run summary](screenshots/deployment/github-actions-run-summary.png)

@@ -7,6 +7,15 @@ This matrix is generated from the rebuilt modular validation framework and repre
 | infra | INF-001 Kubernetes inventory artifacts | Pod, service, ingress, ArgoCD app, and ExternalSecret outputs captured | `artifacts/kubernetes-pod-inventory.txt` | `PASS` |
 | messaging | MSG-001 Kafka runtime health | Docker runtime proof captured for external Kafka | `artifacts/kafka-runtime-health.txt` | `PASS` |
 | messaging | MSG-002 Kafka dashboard proof | Kafka dashboard screenshot will be produced during observability validation | `screenshots/messaging/kafka-dashboard.png` | `PASS` |
+| deployment | DEP-001 Service CI latest tag publish proof | Real GitHub Actions run page shows the service CI workflow that published the latest tag metadata used by deployment-poc. | `screenshots/deployment/service-ci-latest-tag-publish.png` | `PASS` |
+| deployment | DEP-001A Latest tag metadata proof | Fresh service CI produced latest tag 23700292848 for product-service, but latest_tags.yaml still shows 23599512382. | `screenshots/deployment/latest-tags-metadata-proof.png` | `FAIL` |
+| deployment | DEP-001B Jira lifecycle API proof | Fresh Jira ticket creation, progress comments, and final completed status were verified via Jira REST API. | `artifacts/jira-lifecycle-proof.json` | `PASS` |
+| deployment | DEP-002 GitHub Actions deployment run summary | Real GitHub Actions workflow run page captured with job summary visible | `screenshots/deployment/github-actions-run-summary.png` | `PASS` |
+| deployment | DEP-003 GitHub Actions runner proof | Real GitHub job page captured with the self-hosted runner details visible | `screenshots/deployment/github-actions-runner-proof.png` | `PASS` |
+| deployment | DEP-004 deployment-poc result proof | Real GitHub workflow run page captured with the deployment-result artifact visible as primary browser proof | `screenshots/deployment/deployment-result-proof.png` | `PASS` |
+| deployment | DEP-005 GitOps commit proof | Real public GitHub commit page shows the leninkart-infra revision and changed values file | `screenshots/deployment/gitops-commit-proof.png` | `PASS` |
+| deployment | DEP-006 ArgoCD deployment application proof | Real ArgoCD application page shows Synced and Healthy on the expected revision | `screenshots/deployment/argocd-deployment-app.png` | `PASS` |
+| deployment | DEP-007 Application deployment proof | Real browser screenshot confirms the deployed LeninKart application is reachable | `screenshots/deployment/application-home-proof.png` | `PASS` |
 | application | APP-001 Frontend login page | Login page visible | `screenshots/application/frontend-login.png` | `PASS` |
 | application | APP-002 Frontend signup page | Signup form visible | `screenshots/application/frontend-signup.png` | `PASS` |
 | application | APP-003 Signup success state | Signup success notice visible | `screenshots/application/frontend-signup-success.png` | `PASS` |
@@ -18,13 +27,6 @@ This matrix is generated from the rebuilt modular validation framework and repre
 | gitops | GIT-001 ArgoCD login page | ArgoCD login visible | `screenshots/gitops/argocd-login.png` | `PASS` |
 | gitops | GIT-002 ArgoCD applications list | Core app names visible | `screenshots/gitops/argocd-app-list.png` | `PASS` |
 | gitops | GIT-003 ArgoCD app detail | Selected app detail visible | `screenshots/gitops/argocd-app-detail.png` | `PASS` |
-| deployment | DEP-001 Jira ticket proof | Jira browser UI proof is intentionally out of scope for the final supported validation layer. | `-` | `WARN` |
-| deployment | DEP-002 GitHub Actions deployment run summary | Real GitHub Actions workflow run page captured with job summary visible | `screenshots/deployment/github-actions-run-summary.png` | `PASS` |
-| deployment | DEP-003 GitHub Actions runner proof | Real GitHub job page captured with the self-hosted runner details visible | `screenshots/deployment/github-actions-runner-proof.png` | `PASS` |
-| deployment | DEP-004 deployment-poc result proof | Real GitHub workflow run page captured with the deployment-result artifact visible as primary browser proof | `screenshots/deployment/deployment-result-proof.png` | `PASS` |
-| deployment | DEP-005 GitOps commit proof | Real public GitHub commit page shows the leninkart-infra revision and changed values file | `screenshots/deployment/gitops-commit-proof.png` | `PASS` |
-| deployment | DEP-006 ArgoCD deployment application proof | Real ArgoCD application page shows Synced and Healthy on the expected revision | `screenshots/deployment/argocd-deployment-app.png` | `PASS` |
-| deployment | DEP-007 Application deployment proof | Real browser screenshot confirms the deployed LeninKart application is reachable | `screenshots/deployment/application-home-proof.png` | `PASS` |
 | secrets | SEC-001 Vault login page | Vault login visible | `screenshots/secrets/vault-login.png` | `PASS` |
 | secrets | SEC-002 Vault safe inventory view | Vault secret engines view visible | `screenshots/secrets/vault-secret-inventory.png` | `PASS` |
 | secrets | SEC-003 Vault secret proof artifact | Safe secret-path proof written | `artifacts/vault-secret-proof.md` | `PASS` |
