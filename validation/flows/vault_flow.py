@@ -31,18 +31,24 @@ def run(page: Page, config: ValidationConfig, recorder: RunRecorder) -> None:
     token = vault_checks.resolve_root_token(config.env)
     page.locator('input[name="token"]').fill(token)
     page.get_by_role("button", name="Sign In").click()
+    page.set_viewport_size({"width": 1720, "height": 1280})
+    page.goto(config.env["VAULT_URL"].rstrip("/") + "/ui/vault/secrets/secret/kv/list/leninkart/", wait_until="domcontentloaded")
     capture_when_ready(
         page,
         config.screenshot_dir("secrets") / "vault-secret-inventory.png",
         require_no_loading=False,
         verify=lambda: (
-            wait_for_text(page, "Secrets engines", long_timeout),
-            wait_for_text(page, "Five secrets engines", long_timeout),
+            wait_for_text(page, "secret", long_timeout),
+            wait_for_text(page, "observability/", long_timeout),
+            wait_for_text(page, "product-service/", long_timeout),
+            wait_for_text(page, "order-service/", long_timeout),
+            wait_for_text(page, "postgres/", long_timeout),
         ),
         retries=waits["retry_count"],
         retry_wait_ms=waits["retry_sleep_ms"],
         timeout_ms=long_timeout,
         image_rules=image_rules,
+        full_page=True,
     )
     recorder.add_step(StepResult("SEC-002", "secrets", "Vault safe inventory view", "PASS", "Vault secret engines view visible", "screenshots/secrets/vault-secret-inventory.png"))
 

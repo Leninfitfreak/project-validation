@@ -16,6 +16,8 @@ def run(page: Page, config: ValidationConfig, recorder: RunRecorder) -> None:
     long_timeout = waits["long_timeout_ms"]
 
     page.goto(config.env["ARGOCD_URL"], wait_until="domcontentloaded")
+    page.set_viewport_size({"width": 1720, "height": 1200})
+    page.evaluate("document.body.style.zoom='0.9'")
     capture_when_ready(
         page,
         config.screenshot_dir("gitops") / "argocd-login.png",
@@ -25,21 +27,30 @@ def run(page: Page, config: ValidationConfig, recorder: RunRecorder) -> None:
         retry_wait_ms=waits["retry_sleep_ms"],
         timeout_ms=long_timeout,
         image_rules=image_rules,
+        full_page=True,
     )
     recorder.add_step(StepResult("GIT-001", "gitops", "ArgoCD entry proof", "PASS", "ArgoCD login or application view is visible", "screenshots/gitops/argocd-login.png"))
 
     login_flows.ensure_argocd_login(page, config, long_timeout)
 
     expected_apps = config.settings["defaults"]["gitops"]["expected_apps"]
+    page.set_viewport_size({"width": 1900, "height": 1450})
+    page.evaluate("document.body.style.zoom='0.82'")
+    page.evaluate("window.scrollTo(0, 0)")
     capture_when_ready(
         page,
         config.screenshot_dir("gitops") / "argocd-app-list.png",
         require_no_loading=False,
-        verify=lambda: argocd_checks.app_list(page, long_timeout),
+        verify=lambda: (
+            argocd_checks.app_list(page, long_timeout),
+            page.get_by_text("loadtest-dev", exact=False).first.wait_for(timeout=long_timeout),
+            page.get_by_text("loki-dev", exact=False).first.wait_for(timeout=long_timeout),
+        ),
         retries=waits["retry_count"],
         retry_wait_ms=waits["retry_sleep_ms"],
         timeout_ms=long_timeout,
         image_rules=image_rules,
+        full_page=True,
     )
     recorder.add_step(StepResult("GIT-002", "gitops", "ArgoCD applications list", "PASS", "Core app names visible", "screenshots/gitops/argocd-app-list.png"))
 
