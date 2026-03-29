@@ -1,9 +1,9 @@
 # Platform Validation Results
 
 - Total steps: `40`
-- Passed: `39`
+- Passed: `40`
 - Warnings: `0`
-- Failed: `1`
+- Failed: `0`
 
 ## INF-001 Kubernetes inventory artifacts
 
@@ -37,8 +37,8 @@
 
 ## DEP-001A Latest tag metadata proof
 
-- Status: `FAIL`
-- Detail: Fresh service CI produced latest tag 23700292848 for product-service, but latest_tags.yaml still shows 23599512382.
+- Status: `PASS`
+- Detail: Real GitHub file page shows the latest_tags entry that deployment-poc resolved for this deployment.
 - Screenshot: [screenshots/deployment/latest-tags-metadata-proof.png](screenshots/deployment/latest-tags-metadata-proof.png)
 
 ![Latest tag metadata proof](screenshots/deployment/latest-tags-metadata-proof.png)
@@ -176,13 +176,13 @@
 ![User activity overview](screenshots/application/user-activity.png)
 
 
-## GIT-001 ArgoCD login page
+## GIT-001 ArgoCD entry proof
 
 - Status: `PASS`
-- Detail: ArgoCD login visible
+- Detail: ArgoCD login or application view is visible
 - Screenshot: [screenshots/gitops/argocd-login.png](screenshots/gitops/argocd-login.png)
 
-![ArgoCD login page](screenshots/gitops/argocd-login.png)
+![ArgoCD entry proof](screenshots/gitops/argocd-login.png)
 
 
 ## GIT-002 ArgoCD applications list

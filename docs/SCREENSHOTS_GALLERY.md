@@ -70,9 +70,9 @@
 
 ## Gitops
 
-### GIT-001 ArgoCD login page
+### GIT-001 ArgoCD entry proof
 
-![ArgoCD login page](screenshots/gitops/argocd-login.png)
+![ArgoCD entry proof](screenshots/gitops/argocd-login.png)
 
 ### GIT-002 ArgoCD applications list
 

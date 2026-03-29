@@ -6,6 +6,7 @@ from validation.checks import argocd_checks
 from validation.core.config import ValidationConfig
 from validation.core.reporting import RunRecorder, StepResult
 from validation.core.screenshots import capture_when_ready
+from validation.ui import login_flows
 
 
 def run(page: Page, config: ValidationConfig, recorder: RunRecorder) -> None:
@@ -19,17 +20,15 @@ def run(page: Page, config: ValidationConfig, recorder: RunRecorder) -> None:
         page,
         config.screenshot_dir("gitops") / "argocd-login.png",
         require_no_loading=False,
-        verify=lambda: argocd_checks.login_page(page, timeout),
+        verify=lambda: argocd_checks.login_page(page, timeout) if page.locator('input[name="username"]').count() else argocd_checks.app_list(page, long_timeout),
         retries=waits["retry_count"],
         retry_wait_ms=waits["retry_sleep_ms"],
-        timeout_ms=timeout,
+        timeout_ms=long_timeout,
         image_rules=image_rules,
     )
-    recorder.add_step(StepResult("GIT-001", "gitops", "ArgoCD login page", "PASS", "ArgoCD login visible", "screenshots/gitops/argocd-login.png"))
+    recorder.add_step(StepResult("GIT-001", "gitops", "ArgoCD entry proof", "PASS", "ArgoCD login or application view is visible", "screenshots/gitops/argocd-login.png"))
 
-    page.locator('input[name="username"]').fill(config.env["ARGOCD_USERNAME"])
-    page.locator('input[name="password"]').fill(config.env["ARGOCD_PASSWORD"])
-    page.get_by_role("button", name="Sign In").click()
+    login_flows.ensure_argocd_login(page, config, long_timeout)
 
     expected_apps = config.settings["defaults"]["gitops"]["expected_apps"]
     capture_when_ready(
@@ -56,3 +55,4 @@ def run(page: Page, config: ValidationConfig, recorder: RunRecorder) -> None:
         image_rules=image_rules,
     )
     recorder.add_step(StepResult("GIT-003", "gitops", "ArgoCD app detail", "PASS", "Selected app detail visible", "screenshots/gitops/argocd-app-detail.png"))
+

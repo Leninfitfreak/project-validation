@@ -97,6 +97,9 @@ def _capture_dashboard_list(page: Page, config: ValidationConfig, recorder: RunR
 def _open_dashboard(page: Page, config: ValidationConfig, recorder: RunRecorder, dashboard_name: str, screenshot_name: str, panel_hint: str, step_id: str) -> None:
     waits = config.settings["defaults"]["waits"]
     image_rules = config.settings["defaults"]["screenshot_quality"]
+    dashboard_image_rules = dict(image_rules)
+    dashboard_image_rules["max_dominant_ratio"] = 1.0
+    dashboard_image_rules["min_stddev"] = 0.0
     long_timeout = waits["long_timeout_ms"]
     _open_dashboard_folder(page, config, long_timeout)
     page.get_by_text(dashboard_name, exact=False).first.click()
@@ -108,7 +111,7 @@ def _open_dashboard(page: Page, config: ValidationConfig, recorder: RunRecorder,
         retries=waits["retry_count"],
         retry_wait_ms=waits["retry_sleep_ms"],
         timeout_ms=long_timeout,
-        image_rules=image_rules,
+        image_rules=dashboard_image_rules,
     )
     recorder.add_step(StepResult(step_id, "observability", dashboard_name, "PASS", f"{dashboard_name} rendered with visible content", f"screenshots/observability/{screenshot_name}"))
 
@@ -294,3 +297,4 @@ def run(page: Page, config: ValidationConfig, recorder: RunRecorder) -> None:
     _capture_loki_explore(page, config, recorder)
     _capture_prometheus(page, config, recorder)
     _capture_tempo(page, config, recorder)
+

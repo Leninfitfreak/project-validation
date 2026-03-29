@@ -13,38 +13,38 @@
 
 ## Latest Validated Deployment
 
-- Jira ticket: `SCRUM-29`
-- Jira ticket URL: `https://leninkart.atlassian.net/browse/SCRUM-29`
+- Jira ticket: `SCRUM-34`
+- Jira ticket URL: `https://leninkart.atlassian.net/browse/SCRUM-34`
 - Jira final status: `Done`
 - Jira comments captured: `10`
 - Jira progress stages: `workflow_triggered, jira_validated, target_resolved, lock_acquired, gitops_commit_pushed, argocd_sync_started, argocd_synced_healthy, post_checks_completed, completed`
-- Workflow run: `#52`
-- Workflow URL: `https://github.com/Leninfitfreak/deployment-poc/actions/runs/23700350823`
+- Workflow run: `#57`
+- Workflow URL: `https://github.com/Leninfitfreak/deployment-poc/actions/runs/23702274477`
 - Runner: `leninkar-runner`
 - Deployment action: `already_deployed`
 - Requested version: `latest-dev`
-- Resolved version: `23599512382`
+- Resolved version: `23701741505`
 - Version source: `latest_tag_metadata`
 - Version reference: `latest-dev`
 - Image repository: `leninfitfreak/product-service`
 - latest_tags file: `config/latest_tags.yaml`
-- latest_tags value: `23599512382`
-- latest_tags updated at: `2026-03-28T00:00:00Z`
+- latest_tags value: `23701741505`
+- latest_tags updated at: `2026-03-29T04:54:25Z`
 - latest_tags source repo: `Leninfitfreak/leninkart-product-service`
 - latest_tags source branch: `dev`
 - Expected fresh latest-tag service: `product-service`
-- Expected fresh latest-tag value: `23700292848`
-- Expected latest-tag match: `False`
-- GitOps commit: `c11855a113b4b3638c282b5e852eb382147c9594`
+- Expected fresh latest-tag value: `23701741505`
+- Expected latest-tag match: `True`
+- GitOps commit: `1d7c825e7edcb792e9c9f19c234ffc1318b860fc`
 - GitOps values path: `applications/product-service/helm/values-dev.yaml`
 - ArgoCD app: `dev-product-service`
 - Final sync: `Synced`
 - Final health: `Healthy`
-- Service CI proof run: `https://github.com/Leninfitfreak/leninkart-product-service/actions/runs/23700292848`
+- Service CI proof run: `https://github.com/Leninfitfreak/leninkart-product-service/actions/runs/23701741505`
 - Service CI metadata contract: `True`
-- Fresh orchestration context: `{'target_app': 'product-service', 'environment': 'dev', 'requested_version': 'latest-dev', 'service_ci_run_id': 23700292848, 'service_ci_run_url': 'https://github.com/Leninfitfreak/leninkart-product-service/actions/runs/23700292848', 'jira_ticket': {'key': 'SCRUM-29', 'url': 'https://leninkart.atlassian.net/browse/SCRUM-29', 'summary': 'Auto Validation - product-service latest-dev deployment', 'description': 'app: product-service\nenv: dev\nversion: latest-dev\ncomponent: backend\nreason: automated end-to-end platform validation', 'status_name': 'To Do'}}`
+- Fresh orchestration context: `{}`
 - Jira UI status: `SKIPPED`
-- Supporting artifact: `github-actions://Leninfitfreak/deployment-poc/runs/23700350823/artifacts/6163068223`
+- Supporting artifact: `github-actions://Leninfitfreak/deployment-poc/runs/23702274477/artifacts/6163715869`
 
 ## Screenshot Proof
 
@@ -57,7 +57,7 @@
 
 ### DEP-001A Latest tag metadata proof
 
-- Detail: Fresh service CI produced latest tag 23700292848 for product-service, but latest_tags.yaml still shows 23599512382.
+- Detail: Real GitHub file page shows the latest_tags entry that deployment-poc resolved for this deployment.
 - Screenshot: [screenshots/deployment/latest-tags-metadata-proof.png](screenshots/deployment/latest-tags-metadata-proof.png)
 
 ![Latest tag metadata proof](screenshots/deployment/latest-tags-metadata-proof.png)
@@ -106,7 +106,6 @@
 
 ## Warnings
 
-- Fresh service CI produced latest tag 23700292848 for product-service, but latest_tags.yaml still shows 23599512382.
 - Jira browser UI proof was skipped by configuration for this validation run.
 
 ## Evidence Model
@@ -116,4 +115,4 @@
 
 ## Final Verdict
 
-`FAIL`
+`PASS_WITH_WARNINGS`

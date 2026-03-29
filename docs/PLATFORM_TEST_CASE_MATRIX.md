@@ -8,7 +8,7 @@ This matrix is generated from the rebuilt modular validation framework and repre
 | messaging | MSG-001 Kafka runtime health | Docker runtime proof captured for external Kafka | `artifacts/kafka-runtime-health.txt` | `PASS` |
 | messaging | MSG-002 Kafka dashboard proof | Kafka dashboard screenshot will be produced during observability validation | `screenshots/messaging/kafka-dashboard.png` | `PASS` |
 | deployment | DEP-001 Service CI latest tag publish proof | Real GitHub Actions run page shows the service CI workflow that published the latest tag metadata used by deployment-poc. | `screenshots/deployment/service-ci-latest-tag-publish.png` | `PASS` |
-| deployment | DEP-001A Latest tag metadata proof | Fresh service CI produced latest tag 23700292848 for product-service, but latest_tags.yaml still shows 23599512382. | `screenshots/deployment/latest-tags-metadata-proof.png` | `FAIL` |
+| deployment | DEP-001A Latest tag metadata proof | Real GitHub file page shows the latest_tags entry that deployment-poc resolved for this deployment. | `screenshots/deployment/latest-tags-metadata-proof.png` | `PASS` |
 | deployment | DEP-001B Jira lifecycle API proof | Fresh Jira ticket creation, progress comments, and final completed status were verified via Jira REST API. | `artifacts/jira-lifecycle-proof.json` | `PASS` |
 | deployment | DEP-002 GitHub Actions deployment run summary | Real GitHub Actions workflow run page captured with job summary visible | `screenshots/deployment/github-actions-run-summary.png` | `PASS` |
 | deployment | DEP-003 GitHub Actions runner proof | Real GitHub job page captured with the self-hosted runner details visible | `screenshots/deployment/github-actions-runner-proof.png` | `PASS` |
@@ -24,7 +24,7 @@ This matrix is generated from the rebuilt modular validation framework and repre
 | application | APP-006 Product list with created items | Created products visible in list | `screenshots/application/product-list.png` | `PASS` |
 | application | APP-007 Order ledger populated | Order row visible after buy flow | `screenshots/application/order-ledger.png` | `PASS` |
 | application | APP-008 User activity overview | User activity panel visible | `screenshots/application/user-activity.png` | `PASS` |
-| gitops | GIT-001 ArgoCD login page | ArgoCD login visible | `screenshots/gitops/argocd-login.png` | `PASS` |
+| gitops | GIT-001 ArgoCD entry proof | ArgoCD login or application view is visible | `screenshots/gitops/argocd-login.png` | `PASS` |
 | gitops | GIT-002 ArgoCD applications list | Core app names visible | `screenshots/gitops/argocd-app-list.png` | `PASS` |
 | gitops | GIT-003 ArgoCD app detail | Selected app detail visible | `screenshots/gitops/argocd-app-detail.png` | `PASS` |
 | secrets | SEC-001 Vault login page | Vault login visible | `screenshots/secrets/vault-login.png` | `PASS` |

@@ -10,8 +10,8 @@
 
 ## `DEP-001A` Latest tag metadata proof
 
-- Status: `FAIL`
-- Detail: Fresh service CI produced latest tag 23700292848 for product-service, but latest_tags.yaml still shows 23599512382.
+- Status: `PASS`
+- Detail: Real GitHub file page shows the latest_tags entry that deployment-poc resolved for this deployment.
 - Screenshot: [screenshots/deployment/latest-tags-metadata-proof.png](screenshots/deployment/latest-tags-metadata-proof.png)
 
 ![Latest tag metadata proof](screenshots/deployment/latest-tags-metadata-proof.png)
