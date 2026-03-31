@@ -13,38 +13,38 @@
 
 ## Latest Validated Deployment
 
-- Jira ticket: `SCRUM-41`
-- Jira ticket URL: `https://leninkart.atlassian.net/browse/SCRUM-41`
+- Jira ticket: `SCRUM-42`
+- Jira ticket URL: `https://leninkart.atlassian.net/browse/SCRUM-42`
 - Jira final status: `Done`
 - Jira comments captured: `10`
 - Jira progress stages: `workflow_triggered, jira_validated, target_resolved, lock_acquired, gitops_commit_pushed, argocd_sync_started, argocd_synced_healthy, post_checks_completed, completed`
-- Workflow run: `#64`
-- Workflow URL: `https://github.com/Leninfitfreak/deployment-poc/actions/runs/23812586124`
+- Workflow run: `#65`
+- Workflow URL: `https://github.com/Leninfitfreak/deployment-poc/actions/runs/23818019006`
 - Runner: `leninkar-runner`
 - Deployment action: `deployed`
 - Requested version: `latest-dev`
-- Resolved version: `23812493467`
+- Resolved version: `23817402173`
 - Version source: `latest_tag_metadata`
 - Version reference: `latest-dev`
 - Image repository: `leninfitfreak/product-service`
 - latest_tags file: `config/latest_tags.yaml`
-- latest_tags value: `23812493467`
-- latest_tags updated at: `2026-03-31T18:12:54Z`
+- latest_tags value: `23817402173`
+- latest_tags updated at: `2026-03-31T20:30:53Z`
 - latest_tags source repo: `Leninfitfreak/leninkart-product-service`
 - latest_tags source branch: `dev`
 - Expected fresh latest-tag service: `product-service`
-- Expected fresh latest-tag value: `23812493467`
+- Expected fresh latest-tag value: `23817402173`
 - Expected latest-tag match: `True`
-- GitOps commit: `b9d8297dd74e9b3b91cb9ae0417b3d46b03b15e6`
+- GitOps commit: `bce8c2523ebd01901d9a33cd029a8099b3f388b4`
 - GitOps values path: `applications/product-service/helm/values-dev.yaml`
 - ArgoCD app: `dev-product-service`
 - Final sync: `Synced`
 - Final health: `Healthy`
-- Service CI proof run: `https://github.com/Leninfitfreak/leninkart-product-service/actions/runs/23812493467`
+- Service CI proof run: `https://github.com/Leninfitfreak/leninkart-product-service/actions/runs/23817402173`
 - Service CI metadata contract: `True`
-- Fresh orchestration context: `{'target_app': 'product-service', 'environment': 'dev', 'requested_version': 'latest-dev', 'service_ci_run_id': 23812493467, 'service_ci_run_url': 'https://github.com/Leninfitfreak/leninkart-product-service/actions/runs/23812493467', 'jira_ticket': {'key': 'SCRUM-41', 'url': 'https://leninkart.atlassian.net/browse/SCRUM-41', 'summary': 'Auto Validation - product-service latest-dev deployment', 'description': 'app: product-service\nenv: dev\nversion: latest-dev\ncomponent: backend\nreason: automated end-to-end platform validation', 'status_name': 'To Do'}}`
+- Fresh orchestration context: `{'target_app': 'product-service', 'environment': 'dev', 'requested_version': 'latest-dev', 'service_ci_run_id': 23817402173, 'service_ci_run_url': 'https://github.com/Leninfitfreak/leninkart-product-service/actions/runs/23817402173', 'jira_ticket': {'key': 'SCRUM-42', 'url': 'https://leninkart.atlassian.net/browse/SCRUM-42', 'summary': 'Auto Validation - product-service latest-dev deployment', 'description': 'app: product-service\nenv: dev\nversion: latest-dev\ncomponent: backend\nreason: automated end-to-end platform validation', 'status_name': 'To Do'}}`
 - Jira UI status: `SKIPPED`
-- Supporting artifact: `github-actions://Leninfitfreak/deployment-poc/runs/23812586124/artifacts/6205867967`
+- Supporting artifact: `github-actions://Leninfitfreak/deployment-poc/runs/23818019006/artifacts/6208205962`
 
 ## Screenshot Proof
 
