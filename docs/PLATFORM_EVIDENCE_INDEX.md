@@ -235,7 +235,7 @@
 
 - Category: `secrets`
 - Status: `PASS`
-- Proof: Vault secret engines view visible
+- Proof: Vault leninkart secret path inventory visible without exposing secret values
 - Screenshot: [screenshots/secrets/vault-secret-inventory.png](screenshots/secrets/vault-secret-inventory.png)
 
 ![Vault safe inventory view](screenshots/secrets/vault-secret-inventory.png)

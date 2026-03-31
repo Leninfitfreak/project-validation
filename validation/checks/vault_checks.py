@@ -56,6 +56,11 @@ print(json.dumps(inventory))
     return json.loads(result.stdout)
 
 
+def top_level_inventory_entries(inventory: dict[str, list[str]]) -> list[str]:
+    entries = inventory.get("secret/leninkart/", [])
+    return sorted(str(item).strip() for item in entries if str(item).strip())
+
+
 def write_inventory_report(target: Path, inventory: dict[str, list[str]]) -> None:
     total = sum(len(values) for values in inventory.values())
     lines = [

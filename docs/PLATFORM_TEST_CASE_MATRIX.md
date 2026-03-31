@@ -28,7 +28,7 @@ This matrix is generated from the rebuilt modular validation framework and repre
 | gitops | GIT-002 ArgoCD applications list | Core app names visible | `screenshots/gitops/argocd-app-list.png` | `PASS` |
 | gitops | GIT-003 ArgoCD app detail | Selected app detail visible | `screenshots/gitops/argocd-app-detail.png` | `PASS` |
 | secrets | SEC-001 Vault login page | Vault login visible | `screenshots/secrets/vault-login.png` | `PASS` |
-| secrets | SEC-002 Vault safe inventory view | Vault secret engines view visible | `screenshots/secrets/vault-secret-inventory.png` | `PASS` |
+| secrets | SEC-002 Vault safe inventory view | Vault leninkart secret path inventory visible without exposing secret values | `screenshots/secrets/vault-secret-inventory.png` | `PASS` |
 | secrets | SEC-003 Vault secret proof artifact | Safe secret-path proof written | `artifacts/vault-secret-proof.md` | `PASS` |
 | observability | OBS-001 Grafana login | Grafana login page visible | `screenshots/observability/grafana-login.png` | `PASS` |
 | observability | OBS-002 Grafana dashboard list | Provisioned dashboard list visible inside the LeninKart folder | `screenshots/observability/grafana-dashboard-list.png` | `PASS` |

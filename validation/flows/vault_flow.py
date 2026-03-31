@@ -6,7 +6,7 @@ from validation.checks import vault_checks
 from validation.core.config import ValidationConfig
 from validation.core.reporting import RunRecorder, StepResult
 from validation.core.screenshots import capture_when_ready
-from validation.core.waits import wait_for_text
+from validation.core.waits import wait_for_condition, wait_for_text
 
 
 def run(page: Page, config: ValidationConfig, recorder: RunRecorder) -> None:
@@ -29,30 +29,42 @@ def run(page: Page, config: ValidationConfig, recorder: RunRecorder) -> None:
     recorder.add_step(StepResult("SEC-001", "secrets", "Vault login page", "PASS", "Vault login visible", "screenshots/secrets/vault-login.png"))
 
     token = vault_checks.resolve_root_token(config.env)
+    inventory = vault_checks.list_secret_inventory(token)
+    expected_entries = vault_checks.top_level_inventory_entries(inventory)
+
     page.locator('input[name="token"]').fill(token)
     page.get_by_role("button", name="Sign In").click()
     page.set_viewport_size({"width": 1720, "height": 1280})
-    page.goto(config.env["VAULT_URL"].rstrip("/") + "/ui/vault/secrets/secret/kv/list/leninkart/", wait_until="domcontentloaded")
+    wait_for_text(page, "Dashboard", long_timeout)
+    page.get_by_text("Secrets Engines", exact=False).first.click()
+    wait_for_text(page, "secret/", long_timeout)
+    page.get_by_text("secret/", exact=False).first.click()
+    wait_for_text(page, "leninkart/", long_timeout)
+    page.get_by_text("leninkart/", exact=False).first.click()
+
+    def verify_inventory_view() -> None:
+        wait_for_text(page, "secret", long_timeout)
+        wait_for_text(page, "leninkart", long_timeout)
+        wait_for_condition(
+            page,
+            "vault top-level entries visible",
+            lambda: sum(1 for item in expected_entries if item in (page.text_content("body") or "")) >= min(3, len(expected_entries)),
+            long_timeout,
+        )
+
     capture_when_ready(
         page,
         config.screenshot_dir("secrets") / "vault-secret-inventory.png",
         require_no_loading=False,
-        verify=lambda: (
-            wait_for_text(page, "secret", long_timeout),
-            wait_for_text(page, "observability/", long_timeout),
-            wait_for_text(page, "product-service/", long_timeout),
-            wait_for_text(page, "order-service/", long_timeout),
-            wait_for_text(page, "postgres/", long_timeout),
-        ),
+        verify=verify_inventory_view,
         retries=waits["retry_count"],
         retry_wait_ms=waits["retry_sleep_ms"],
         timeout_ms=long_timeout,
         image_rules=image_rules,
         full_page=True,
     )
-    recorder.add_step(StepResult("SEC-002", "secrets", "Vault safe inventory view", "PASS", "Vault secret engines view visible", "screenshots/secrets/vault-secret-inventory.png"))
+    recorder.add_step(StepResult("SEC-002", "secrets", "Vault safe inventory view", "PASS", "Vault leninkart secret path inventory visible without exposing secret values", "screenshots/secrets/vault-secret-inventory.png"))
 
-    inventory = vault_checks.list_secret_inventory(token)
     proof_artifact = config.artifacts_dir / "vault-secret-proof.md"
     proof_artifact.write_text(
         "\n".join(

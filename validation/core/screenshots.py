@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import shutil
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable
 
+from PIL import Image
+from PIL.PngImagePlugin import PngInfo
 from playwright.sync_api import Locator, Page
 
 from .image_checks import ImageCheckResult, assert_meaningful_image
@@ -19,6 +22,16 @@ def _debug_dir_for(path: Path) -> Path:
     target.mkdir(parents=True, exist_ok=True)
     return target
 
+
+
+
+def _stamp_png_metadata(path: Path) -> None:
+    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    with Image.open(path) as image:
+        pnginfo = PngInfo()
+        pnginfo.add_text("validation_generated_at", timestamp)
+        pnginfo.add_text("validation_relative_path", str(path).replace('\\', '/'))
+        image.save(path, pnginfo=pnginfo)
 
 def capture_when_ready(
     page: Page,
@@ -67,6 +80,7 @@ def capture_when_ready(
                 )
             result = assert_meaningful_image(temp_path, image_rules)
             shutil.move(str(temp_path), str(path))
+            _stamp_png_metadata(path)
             return result
         except Exception as exc:
             last_error = exc
