@@ -556,6 +556,46 @@ def create_validation_jira_ticket(config: ValidationConfig, app_key: str, reques
     }
 
 
+def run_job_details(config: ValidationConfig, repo: str, run_id: int) -> dict:
+    api_base = config.settings['defaults']['deployment_poc']['github_api_base']
+    auth = github_auth(config)
+    jobs = api_get_json(f'{api_base}/repos/{repo}/actions/runs/{run_id}/jobs', auth=auth).get('jobs', [])
+    if not jobs:
+        raise RuntimeError(f'No jobs were returned for {repo} run {run_id}')
+    job = jobs[0]
+    return {
+        'job_name': job.get('name', ''),
+        'job_url': job.get('html_url', ''),
+        'runner_name': job.get('runner_name', ''),
+        'runner_group_name': job.get('runner_group_name', ''),
+        'labels': job.get('labels', []),
+        'steps': job.get('steps', []),
+    }
+
+
+def latest_successful_workflow_run(config: ValidationConfig, repo: str, workflow_file: str, *, branch: str = '', per_page: int = 20) -> dict:
+    for run_data in workflow_runs(config, repo, workflow_file, per_page=per_page):
+        if run_data.get('status') != 'completed' or run_data.get('conclusion') != 'success':
+            continue
+        if branch and str(run_data.get('head_branch') or '') != branch:
+            continue
+        if not str(run_data.get('path', '')).endswith(workflow_file):
+            continue
+        details = run_job_details(config, repo, int(run_data['id']))
+        return {
+            'repo': repo,
+            'workflow_file': workflow_file,
+            'workflow_name': run_data.get('name', workflow_file),
+            'run_id': int(run_data['id']),
+            'run_number': run_data.get('run_number'),
+            'run_url': run_data.get('html_url', ''),
+            'head_branch': run_data.get('head_branch', ''),
+            'head_sha': run_data.get('head_sha', ''),
+            **details,
+        }
+    raise RuntimeError(f'No successful workflow run found for {repo}/{workflow_file} on branch {branch or "<any>"}')
+
+
 def workflow_runs(config: ValidationConfig, repo: str, workflow_file: str, *, per_page: int = 20) -> list[dict]:
     api_base = config.settings['defaults']['deployment_poc']['github_api_base']
     auth = github_auth(config)
@@ -659,6 +699,13 @@ def prepare_validation_run(config: ValidationConfig) -> dict:
     if deploy_run.get('conclusion') != 'success':
         raise RuntimeError(f'deploy-from-jira workflow failed: {deploy_run.get("html_url")}')
 
-    summary = latest_successful_deployment_run(config)
-    summary['orchestration'] = orchestration
-    return summary
+    last_error = None
+    for _ in range(24):
+        try:
+            summary = latest_successful_deployment_run(config)
+            summary['orchestration'] = orchestration
+            return summary
+        except RuntimeError as exc:
+            last_error = exc
+            time.sleep(5)
+    raise last_error or RuntimeError('deployment-result artifact did not become available in time')

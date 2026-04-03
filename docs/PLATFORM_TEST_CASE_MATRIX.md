@@ -7,6 +7,9 @@ This matrix is generated from the rebuilt modular validation framework and repre
 | infra | INF-001 Kubernetes inventory artifacts | Pod, service, ingress, ArgoCD app, and ExternalSecret outputs captured | `artifacts/kubernetes-pod-inventory.txt` | `PASS` |
 | messaging | MSG-001 Kafka runtime health | Docker runtime proof captured for external Kafka | `artifacts/kafka-runtime-health.txt` | `PASS` |
 | messaging | MSG-002 Kafka dashboard proof | Kafka dashboard screenshot will be produced during observability validation | `screenshots/messaging/kafka-dashboard.png` | `PASS` |
+| ci | CI-001 SonarQube scan proof | Service CI run 23817402173 shows the SonarQube scan step completed successfully for product-service. | `screenshots/ci/ci-sonarqube-scan.png` | `PASS` |
+| ci | CI-002 SonarQube quality gate proof | Service CI run 23817402173 shows the SonarQube quality gate step completed successfully for product-service. | `screenshots/ci/ci-sonarqube-quality-gate.png` | `PASS` |
+| ci | CI-003 Gitleaks scan proof | Companion quality-security run 23950747261 shows the Gitleaks scan step completed successfully for product-service. | `screenshots/ci/ci-gitleaks-scan.png` | `PASS` |
 | deployment | DEP-001 Service CI latest tag publish proof | Real GitHub Actions run page shows the service CI workflow that published the latest tag metadata used by deployment-poc. | `screenshots/deployment/service-ci-latest-tag-publish.png` | `PASS` |
 | deployment | DEP-001A Latest tag metadata proof | Real GitHub file page shows the latest_tags entry that deployment-poc resolved for this deployment. | `screenshots/deployment/latest-tags-metadata-proof.png` | `PASS` |
 | deployment | DEP-001B Jira lifecycle API proof | Fresh Jira ticket creation, progress comments, and final completed status were verified via Jira REST API. | `artifacts/jira-lifecycle-proof.json` | `PASS` |

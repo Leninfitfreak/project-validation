@@ -34,6 +34,20 @@
 
 ![User activity overview](screenshots/application/user-activity.png)
 
+## Ci
+
+### CI-001 SonarQube scan proof
+
+![SonarQube scan proof](screenshots/ci/ci-sonarqube-scan.png)
+
+### CI-002 SonarQube quality gate proof
+
+![SonarQube quality gate proof](screenshots/ci/ci-sonarqube-quality-gate.png)
+
+### CI-003 Gitleaks scan proof
+
+![Gitleaks scan proof](screenshots/ci/ci-gitleaks-scan.png)
+
 ## Deployment
 
 ### DEP-001 Service CI latest tag publish proof

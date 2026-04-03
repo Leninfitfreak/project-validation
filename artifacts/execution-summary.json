@@ -1,0 +1,411 @@
+{
+  "generated_at": "2026-04-03T17:18:47Z",
+  "steps": [
+    {
+      "id": "INF-001",
+      "category": "infra",
+      "title": "Kubernetes inventory artifacts",
+      "status": "PASS",
+      "detail": "Pod, service, ingress, ArgoCD app, and ExternalSecret outputs captured",
+      "screenshot": null,
+      "artifact": "artifacts/kubernetes-pod-inventory.txt"
+    },
+    {
+      "id": "MSG-001",
+      "category": "messaging",
+      "title": "Kafka runtime health",
+      "status": "PASS",
+      "detail": "Docker runtime proof captured for external Kafka",
+      "screenshot": null,
+      "artifact": "artifacts/kafka-runtime-health.txt"
+    },
+    {
+      "id": "MSG-002",
+      "category": "messaging",
+      "title": "Kafka dashboard proof",
+      "status": "PASS",
+      "detail": "Kafka dashboard screenshot will be produced during observability validation",
+      "screenshot": "screenshots/messaging/kafka-dashboard.png",
+      "artifact": null
+    },
+    {
+      "id": "CI-001",
+      "category": "ci",
+      "title": "SonarQube scan proof",
+      "status": "PASS",
+      "detail": "Service CI run 23817402173 shows the SonarQube scan step completed successfully for product-service.",
+      "screenshot": "screenshots/ci/ci-sonarqube-scan.png",
+      "artifact": null
+    },
+    {
+      "id": "CI-002",
+      "category": "ci",
+      "title": "SonarQube quality gate proof",
+      "status": "PASS",
+      "detail": "Service CI run 23817402173 shows the SonarQube quality gate step completed successfully for product-service.",
+      "screenshot": "screenshots/ci/ci-sonarqube-quality-gate.png",
+      "artifact": null
+    },
+    {
+      "id": "CI-003",
+      "category": "ci",
+      "title": "Gitleaks scan proof",
+      "status": "PASS",
+      "detail": "Companion quality-security run 23950747261 shows the Gitleaks scan step completed successfully for product-service.",
+      "screenshot": "screenshots/ci/ci-gitleaks-scan.png",
+      "artifact": null
+    },
+    {
+      "id": "DEP-001",
+      "category": "deployment",
+      "title": "Service CI latest tag publish proof",
+      "status": "PASS",
+      "detail": "Real GitHub Actions run page shows the service CI workflow that published the latest tag metadata used by deployment-poc.",
+      "screenshot": "screenshots/deployment/service-ci-latest-tag-publish.png",
+      "artifact": null
+    },
+    {
+      "id": "DEP-001A",
+      "category": "deployment",
+      "title": "Latest tag metadata proof",
+      "status": "PASS",
+      "detail": "Real GitHub file page shows the latest_tags entry that deployment-poc resolved for this deployment.",
+      "screenshot": "screenshots/deployment/latest-tags-metadata-proof.png",
+      "artifact": null
+    },
+    {
+      "id": "DEP-001B",
+      "category": "deployment",
+      "title": "Jira lifecycle API proof",
+      "status": "PASS",
+      "detail": "Fresh Jira ticket creation, progress comments, and final completed status were verified via Jira REST API.",
+      "screenshot": null,
+      "artifact": "artifacts/jira-lifecycle-proof.json"
+    },
+    {
+      "id": "DEP-002",
+      "category": "deployment",
+      "title": "GitHub Actions deployment run summary",
+      "status": "PASS",
+      "detail": "Real GitHub Actions workflow run page captured with job summary visible",
+      "screenshot": "screenshots/deployment/github-actions-run-summary.png",
+      "artifact": null
+    },
+    {
+      "id": "DEP-003",
+      "category": "deployment",
+      "title": "GitHub Actions runner proof",
+      "status": "PASS",
+      "detail": "Real GitHub job page captured with the self-hosted runner details visible",
+      "screenshot": "screenshots/deployment/github-actions-runner-proof.png",
+      "artifact": null
+    },
+    {
+      "id": "DEP-004",
+      "category": "deployment",
+      "title": "deployment-poc result proof",
+      "status": "PASS",
+      "detail": "Real GitHub workflow run page captured with the deployment-result artifact visible as primary browser proof",
+      "screenshot": "screenshots/deployment/deployment-result-proof.png",
+      "artifact": null
+    },
+    {
+      "id": "DEP-005",
+      "category": "deployment",
+      "title": "GitOps commit proof",
+      "status": "PASS",
+      "detail": "Real public GitHub commit page shows the leninkart-infra revision and changed values file",
+      "screenshot": "screenshots/deployment/gitops-commit-proof.png",
+      "artifact": null
+    },
+    {
+      "id": "DEP-006",
+      "category": "deployment",
+      "title": "ArgoCD deployment application proof",
+      "status": "PASS",
+      "detail": "Real ArgoCD application page shows Synced and Healthy on the expected revision",
+      "screenshot": "screenshots/deployment/argocd-deployment-app.png",
+      "artifact": null
+    },
+    {
+      "id": "DEP-007",
+      "category": "deployment",
+      "title": "Application deployment proof",
+      "status": "PASS",
+      "detail": "Real browser screenshot confirms the deployed LeninKart application is reachable",
+      "screenshot": "screenshots/deployment/application-home-proof.png",
+      "artifact": null
+    },
+    {
+      "id": "APP-001",
+      "category": "application",
+      "title": "Frontend login page",
+      "status": "PASS",
+      "detail": "Login page visible",
+      "screenshot": "screenshots/application/frontend-login.png",
+      "artifact": null
+    },
+    {
+      "id": "APP-002",
+      "category": "application",
+      "title": "Frontend signup page",
+      "status": "PASS",
+      "detail": "Signup form visible",
+      "screenshot": "screenshots/application/frontend-signup.png",
+      "artifact": null
+    },
+    {
+      "id": "APP-003",
+      "category": "application",
+      "title": "Signup success state",
+      "status": "PASS",
+      "detail": "Signup success notice visible",
+      "screenshot": "screenshots/application/frontend-signup-success.png",
+      "artifact": null
+    },
+    {
+      "id": "APP-004",
+      "category": "application",
+      "title": "Authenticated dashboard",
+      "status": "PASS",
+      "detail": "Dashboard fully visible",
+      "screenshot": "screenshots/application/frontend-dashboard.png",
+      "artifact": null
+    },
+    {
+      "id": "APP-005",
+      "category": "application",
+      "title": "Product creation form",
+      "status": "PASS",
+      "detail": "Filled product form captured",
+      "screenshot": "screenshots/application/product-form.png",
+      "artifact": null
+    },
+    {
+      "id": "APP-006",
+      "category": "application",
+      "title": "Product list with created items",
+      "status": "PASS",
+      "detail": "Created products visible in list",
+      "screenshot": "screenshots/application/product-list.png",
+      "artifact": null
+    },
+    {
+      "id": "APP-007",
+      "category": "application",
+      "title": "Order ledger populated",
+      "status": "PASS",
+      "detail": "Order row visible after buy flow",
+      "screenshot": "screenshots/application/order-ledger.png",
+      "artifact": null
+    },
+    {
+      "id": "APP-008",
+      "category": "application",
+      "title": "User activity overview",
+      "status": "PASS",
+      "detail": "User activity panel visible",
+      "screenshot": "screenshots/application/user-activity.png",
+      "artifact": null
+    },
+    {
+      "id": "GIT-001",
+      "category": "gitops",
+      "title": "ArgoCD entry proof",
+      "status": "PASS",
+      "detail": "ArgoCD login or application view is visible",
+      "screenshot": "screenshots/gitops/argocd-login.png",
+      "artifact": null
+    },
+    {
+      "id": "GIT-002",
+      "category": "gitops",
+      "title": "ArgoCD applications list",
+      "status": "PASS",
+      "detail": "Core app names visible",
+      "screenshot": "screenshots/gitops/argocd-app-list.png",
+      "artifact": null
+    },
+    {
+      "id": "GIT-003",
+      "category": "gitops",
+      "title": "ArgoCD app detail",
+      "status": "PASS",
+      "detail": "Selected app detail visible",
+      "screenshot": "screenshots/gitops/argocd-app-detail.png",
+      "artifact": null
+    },
+    {
+      "id": "SEC-001",
+      "category": "secrets",
+      "title": "Vault login page",
+      "status": "PASS",
+      "detail": "Vault login visible",
+      "screenshot": "screenshots/secrets/vault-login.png",
+      "artifact": null
+    },
+    {
+      "id": "SEC-002",
+      "category": "secrets",
+      "title": "Vault safe inventory view",
+      "status": "PASS",
+      "detail": "Vault leninkart secret path inventory visible without exposing secret values",
+      "screenshot": "screenshots/secrets/vault-secret-inventory.png",
+      "artifact": null
+    },
+    {
+      "id": "SEC-003",
+      "category": "secrets",
+      "title": "Vault secret proof artifact",
+      "status": "PASS",
+      "detail": "Safe secret-path proof written",
+      "screenshot": null,
+      "artifact": "artifacts/vault-secret-proof.md"
+    },
+    {
+      "id": "OBS-001",
+      "category": "observability",
+      "title": "Grafana login",
+      "status": "PASS",
+      "detail": "Grafana login page visible",
+      "screenshot": "screenshots/observability/grafana-login.png",
+      "artifact": null
+    },
+    {
+      "id": "OBS-002",
+      "category": "observability",
+      "title": "Grafana dashboard list",
+      "status": "PASS",
+      "detail": "Provisioned dashboard list visible inside the LeninKart folder",
+      "screenshot": "screenshots/observability/grafana-dashboard-list.png",
+      "artifact": null
+    },
+    {
+      "id": "OBS-003",
+      "category": "observability",
+      "title": "LeninKart Platform Overview",
+      "status": "PASS",
+      "detail": "LeninKart Platform Overview rendered with visible content",
+      "screenshot": "screenshots/observability/dashboard-platform.png",
+      "artifact": null
+    },
+    {
+      "id": "OBS-004",
+      "category": "observability",
+      "title": "LeninKart Product Service Overview",
+      "status": "PASS",
+      "detail": "LeninKart Product Service Overview rendered with visible content",
+      "screenshot": "screenshots/observability/dashboard-product.png",
+      "artifact": null
+    },
+    {
+      "id": "OBS-005",
+      "category": "observability",
+      "title": "LeninKart Order Service Overview",
+      "status": "PASS",
+      "detail": "LeninKart Order Service Overview rendered with visible content",
+      "screenshot": "screenshots/observability/dashboard-order.png",
+      "artifact": null
+    },
+    {
+      "id": "OBS-006",
+      "category": "observability",
+      "title": "LeninKart Frontend Overview",
+      "status": "PASS",
+      "detail": "LeninKart Frontend Overview rendered with visible content",
+      "screenshot": "screenshots/observability/dashboard-frontend.png",
+      "artifact": null
+    },
+    {
+      "id": "OBS-007",
+      "category": "observability",
+      "title": "LeninKart Logs Overview",
+      "status": "PASS",
+      "detail": "LeninKart Logs Overview rendered with visible content",
+      "screenshot": "screenshots/observability/dashboard-logs.png",
+      "artifact": null
+    },
+    {
+      "id": "OBS-008",
+      "category": "observability",
+      "title": "LeninKart Kafka Overview",
+      "status": "PASS",
+      "detail": "LeninKart Kafka Overview rendered with visible content",
+      "screenshot": "screenshots/observability/dashboard-kafka.png",
+      "artifact": null
+    },
+    {
+      "id": "OBS-009",
+      "category": "observability",
+      "title": "Grafana Explore Loki",
+      "status": "PASS",
+      "detail": "Loki search returned recent product-service logs",
+      "screenshot": "screenshots/observability/grafana-loki-explore.png",
+      "artifact": null
+    },
+    {
+      "id": "OBS-010",
+      "category": "observability",
+      "title": "Prometheus targets",
+      "status": "PASS",
+      "detail": "Prometheus targets page populated",
+      "screenshot": "screenshots/observability/prometheus-targets.png",
+      "artifact": null
+    },
+    {
+      "id": "OBS-011",
+      "category": "observability",
+      "title": "Grafana Tempo datasource",
+      "status": "PASS",
+      "detail": "Tempo datasource page visible",
+      "screenshot": "screenshots/observability/grafana-tempo-datasource.png",
+      "artifact": null
+    },
+    {
+      "id": "OBS-012",
+      "category": "observability",
+      "title": "Tempo search results",
+      "status": "PASS",
+      "detail": "Tempo search returned product-service traces",
+      "screenshot": "screenshots/observability/tempo-search.png",
+      "artifact": null
+    },
+    {
+      "id": "OBS-013",
+      "category": "observability",
+      "title": "Product trace detail",
+      "status": "PASS",
+      "detail": "Product-service trace detail visible",
+      "screenshot": "screenshots/observability/tempo-product-trace.png",
+      "artifact": null
+    },
+    {
+      "id": "OBS-014",
+      "category": "observability",
+      "title": "Order trace detail",
+      "status": "PASS",
+      "detail": "Order-service trace detail visible",
+      "screenshot": "screenshots/observability/tempo-order-trace.png",
+      "artifact": null
+    }
+  ],
+  "artifacts": [
+    "artifacts/kubernetes-pod-inventory.txt",
+    "artifacts/kubernetes-services.txt",
+    "artifacts/kubernetes-ingress.txt",
+    "artifacts/argocd-apps.txt",
+    "artifacts/externalsecrets.txt",
+    "artifacts/kafka-runtime-health.txt",
+    "artifacts/ci-security-validation-summary.json",
+    "artifacts/jira-lifecycle-proof.json",
+    "artifacts/deployment-poc-validation-summary.json",
+    "artifacts/vault-secret-proof.md",
+    "docs/VALIDATION_CLEANUP_REPORT.md",
+    "docs/SCREENSHOT_CLEAN_RUN_POLICY.md",
+    "docs/SCREENSHOT_QUALITY_REPORT.md",
+    "artifacts/blank-image-detection-report.json",
+    "docs/MKDOCS_IMAGE_FIX_REPORT.md",
+    "artifacts/evidence.json",
+    "docs/FINAL_E2E_VALIDATION_REPORT.md"
+  ]
+}

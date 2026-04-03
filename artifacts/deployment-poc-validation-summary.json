@@ -1,0 +1,131 @@
+{
+  "jira_ticket": "SCRUM-51",
+  "jira_ui_status": "SKIPPED",
+  "jira_ticket_url": "https://leninkart.atlassian.net/browse/SCRUM-51",
+  "jira_issue_status": "Done",
+  "jira_comments_total": 11,
+  "jira_expected_progress_stages": [
+    "workflow_triggered",
+    "jira_validated",
+    "target_resolved",
+    "lock_acquired",
+    "gitops_commit_pushed",
+    "argocd_sync_started",
+    "argocd_synced_healthy",
+    "post_checks_completed",
+    "completed"
+  ],
+  "jira_posted_progress_stages": [
+    "workflow_triggered",
+    "jira_validated",
+    "target_resolved",
+    "lock_acquired",
+    "gitops_commit_pushed",
+    "argocd_sync_started",
+    "argocd_final_verification",
+    "argocd_synced_healthy",
+    "post_checks_completed",
+    "completed"
+  ],
+  "jira_feedback": {
+    "enabled": true,
+    "mode": "already_deployed",
+    "jira_comment_added": true,
+    "jira_transition_attempted": true,
+    "jira_transition_result": "success",
+    "jira_transition_name_used": "Done",
+    "jira_feedback_error": "",
+    "current_status": "To Do",
+    "final_status": "Done",
+    "available_transitions": [
+      {
+        "id": "11",
+        "name": "To Do",
+        "to_status_name": "To Do"
+      },
+      {
+        "id": "21",
+        "name": "In Progress",
+        "to_status_name": "In Progress"
+      },
+      {
+        "id": "31",
+        "name": "In Review",
+        "to_status_name": "In Review"
+      },
+      {
+        "id": "41",
+        "name": "Done",
+        "to_status_name": "Done"
+      }
+    ],
+    "comment_attempted": true,
+    "comment_result": "success",
+    "policy_requires_transition_success": false,
+    "policy_satisfied": true
+  },
+  "orchestration": {
+    "target_app": "product-service",
+    "environment": "dev",
+    "requested_version": "latest-dev",
+    "jira_ticket": {
+      "key": "SCRUM-51",
+      "url": "https://leninkart.atlassian.net/browse/SCRUM-51",
+      "summary": "Auto Validation - product-service latest-dev deployment",
+      "description": "app: product-service\nenv: dev\nversion: latest-dev\ncomponent: backend\nreason: automated end-to-end platform validation",
+      "status_name": "To Do"
+    }
+  },
+  "run_id": 23955139890,
+  "run_number": 74,
+  "run_url": "https://github.com/Leninfitfreak/deployment-poc/actions/runs/23955139890",
+  "job_url": "https://github.com/Leninfitfreak/deployment-poc/actions/runs/23955139890/job/69871647307",
+  "runner_name": "leninkar-runner",
+  "workflow_name": "Deploy From Jira",
+  "deployment_action": "already_deployed",
+  "requested_version": "latest-dev",
+  "resolved_version": "23817402173",
+  "version_source": "latest_tag_metadata",
+  "version_reference": "latest-dev",
+  "image_repository": "leninfitfreak/product-service",
+  "latest_tags_file": "config/latest_tags.yaml",
+  "latest_tag_value": "23817402173",
+  "latest_tag_updated_at": "2026-03-31T20:30:53Z",
+  "latest_tag_source_repo": "Leninfitfreak/leninkart-product-service",
+  "latest_tag_source_branch": "dev",
+  "service_ci_run": {
+    "repo": "Leninfitfreak/leninkart-product-service",
+    "workflow_file": "ci-cd.yml",
+    "workflow_name": "Product-Service CI + Latest Tag Publish",
+    "run_id": 23817402173,
+    "run_number": 87,
+    "run_url": "https://github.com/Leninfitfreak/leninkart-product-service/actions/runs/23817402173",
+    "job_url": "https://github.com/Leninfitfreak/leninkart-product-service/actions/runs/23817402173/job/69420515629",
+    "conclusion": "success",
+    "status": "completed",
+    "head_branch": "dev",
+    "display_title": ".github/workflows/ci-cd.yml"
+  },
+  "service_ci_contract": {
+    "workflow_path": "D:\\Projects\\Services\\leninkart-product-service\\.github\\workflows\\ci-cd.yml",
+    "publishes_latest_tag_metadata": true,
+    "direct_gitops_update_removed": true
+  },
+  "expected_latest_service": "product-service",
+  "expected_latest_value": "",
+  "expected_latest_match": true,
+  "gitops_commit": "139ed5e9b0ae40857b38080172bc6a5835d165a5",
+  "values_path": "applications/product-service/helm/values-dev.yaml",
+  "argocd_app": "dev-product-service",
+  "argocd_sync": "Synced",
+  "argocd_health": "Healthy",
+  "argocd_revision": "139ed5e9b0ae40857b38080172bc6a5835d165a5",
+  "gitops_head": "139ed5e9b0ae40857b38080172bc6a5835d165a5",
+  "deployment_poc_branch": "main",
+  "deployment_poc_head": "b616139ae230117715bd7ba76a7973e61483d9bd",
+  "verdict": "PASS_WITH_WARNINGS",
+  "warnings": [
+    "Jira browser UI proof was skipped by configuration for this validation run."
+  ],
+  "supporting_artifact_path": "github-actions://Leninfitfreak/deployment-poc/runs/23955139890/artifacts/6262806842"
+}

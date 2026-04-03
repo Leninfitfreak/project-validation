@@ -1,7 +1,7 @@
 # Platform Validation Results
 
-- Total steps: `40`
-- Passed: `40`
+- Total steps: `43`
+- Passed: `43`
 - Warnings: `0`
 - Failed: `0`
 
@@ -24,6 +24,33 @@
 - Screenshot: [screenshots/messaging/kafka-dashboard.png](screenshots/messaging/kafka-dashboard.png)
 
 ![Kafka dashboard proof](screenshots/messaging/kafka-dashboard.png)
+
+
+## CI-001 SonarQube scan proof
+
+- Status: `PASS`
+- Detail: Service CI run 23817402173 shows the SonarQube scan step completed successfully for product-service.
+- Screenshot: [screenshots/ci/ci-sonarqube-scan.png](screenshots/ci/ci-sonarqube-scan.png)
+
+![SonarQube scan proof](screenshots/ci/ci-sonarqube-scan.png)
+
+
+## CI-002 SonarQube quality gate proof
+
+- Status: `PASS`
+- Detail: Service CI run 23817402173 shows the SonarQube quality gate step completed successfully for product-service.
+- Screenshot: [screenshots/ci/ci-sonarqube-quality-gate.png](screenshots/ci/ci-sonarqube-quality-gate.png)
+
+![SonarQube quality gate proof](screenshots/ci/ci-sonarqube-quality-gate.png)
+
+
+## CI-003 Gitleaks scan proof
+
+- Status: `PASS`
+- Detail: Companion quality-security run 23950747261 shows the Gitleaks scan step completed successfully for product-service.
+- Screenshot: [screenshots/ci/ci-gitleaks-scan.png](screenshots/ci/ci-gitleaks-scan.png)
+
+![Gitleaks scan proof](screenshots/ci/ci-gitleaks-scan.png)
 
 
 ## DEP-001 Service CI latest tag publish proof

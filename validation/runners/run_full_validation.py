@@ -10,6 +10,7 @@ from validation.core.config import load_config
 from validation.core.reporting import RunRecorder, StepResult
 from validation.flows import (
     app_auth_flow,
+    ci_security_flow,
     deployment_flow,
     gitops_flow,
     infra_flow,
@@ -89,12 +90,13 @@ def write_docs(config, recorder: RunRecorder) -> None:
                 "1. Start from a clean output state by removing prior screenshots, reports, and artifacts while preserving retry debug folders only for the current run.",
                 "2. Load URLs, credentials, wait rules, screenshot quality thresholds, and demo data from `.env` and `validation/data/*`.",
                 "3. Capture infrastructure and messaging CLI proof before browser work begins.",
-                "4. Run the frontend user journey in order: login page, signup, authenticated dashboard, product creation, buy flow, and order history proof.",
+                "4. Validate CI security proof from the service pipeline: SonarQube scan, SonarQube quality gate, and Gitleaks evidence.",
                 "5. Validate the latest-tag deployment path: service CI metadata publish, Jira -> deployment-poc resolution, GitOps commit, ArgoCD state, and application reachability proof.",
-                "6. Run GitOps and Vault UI proof flows and generate the safe Vault secret inventory report.",
-                "7. Run observability proof for Grafana dashboards, Loki Explore, Prometheus targets, and Tempo search/detail pages.",
-                "8. Reject blank or weak screenshots automatically, retry with longer waits, and only publish screenshots that pass image-quality checks.",
-                "9. Write markdown, JSON, screenshot manifest, and validation-output bundles for MkDocs and portfolio documentation.",
+                "6. Run the frontend user journey in order: login page, signup, authenticated dashboard, product creation, buy flow, and order history proof.",
+                "7. Run GitOps and Vault UI proof flows and generate the safe Vault secret inventory report.",
+                "8. Run observability proof for Grafana dashboards, Loki Explore, Prometheus targets, and Tempo search/detail pages.",
+                "9. Reject blank or weak screenshots automatically, retry with longer waits, and only publish screenshots that pass image-quality checks.",
+                "10. Write markdown, JSON, screenshot manifest, and validation-output bundles for MkDocs and portfolio documentation.",
             ]
         ),
         encoding="utf-8",
@@ -487,6 +489,73 @@ def write_mkdocs_image_fix_report(config) -> Path:
     return target
 
 
+def write_final_e2e_report(config, recorder: RunRecorder) -> Path:
+    docs = config.docs_dir
+    docs.mkdir(parents=True, exist_ok=True)
+    ci_summary_path = config.artifacts_dir / 'ci-security-validation-summary.json'
+    deployment_summary_path = config.artifacts_dir / 'deployment-poc-validation-summary.json'
+    ci_summary = json.loads(ci_summary_path.read_text(encoding='utf-8')) if ci_summary_path.exists() else {}
+    deployment_summary = json.loads(deployment_summary_path.read_text(encoding='utf-8')) if deployment_summary_path.exists() else {}
+    application_steps = [step for step in recorder.steps if step.category == 'application']
+    observability_steps = [step for step in recorder.steps if step.category == 'observability']
+    vault_steps = [step for step in recorder.steps if step.category == 'secrets']
+    messaging_steps = [step for step in recorder.steps if step.category == 'messaging']
+    failed = [step for step in recorder.steps if step.status not in {'PASS', 'WARN'}]
+    verdict = 'FAIL' if failed else 'PASS'
+    lines = [
+        '# Final E2E Validation Report',
+        '',
+        'This report captures the current end-to-end validation including CI security proof, deployment proof, application proof, observability proof, Vault proof, and messaging proof.',
+        '',
+        '## CI SECURITY VALIDATION',
+        '',
+        f"- Service name: `{ci_summary.get('service_name', '')}`",
+        f"- CI run ID: `{ci_summary.get('ci_run_id', '')}`",
+        f"- CI run URL: `{ci_summary.get('ci_run_url', '')}`",
+        f"- SonarQube status: `{(ci_summary.get('sonarqube_scan') or {}).get('status', '')}`",
+        f"- Quality gate result: `{(ci_summary.get('quality_gate') or {}).get('status', '')}`",
+        f"- Gitleaks result: `{(ci_summary.get('gitleaks') or {}).get('status', '')}`",
+        f"- Gitleaks companion run ID: `{(ci_summary.get('gitleaks') or {}).get('run_id', '')}`",
+        f"- Screenshot: `{(ci_summary.get('sonarqube_scan') or {}).get('screenshot', '')}`",
+        f"- Screenshot: `{(ci_summary.get('quality_gate') or {}).get('screenshot', '')}`",
+        f"- Screenshot: `{(ci_summary.get('gitleaks') or {}).get('screenshot', '')}`",
+        f"- Note: {ci_summary.get('implementation_note', '')}",
+        '',
+        '## DEPLOYMENT VALIDATION',
+        '',
+        f"- Jira ticket key: `{deployment_summary.get('jira_ticket', '')}`",
+        f"- Deployment run ID: `{deployment_summary.get('run_id', '')}`",
+        f"- Deployment run URL: `{deployment_summary.get('run_url', '')}`",
+        f"- Resolved tag: `{deployment_summary.get('resolved_version', '')}`",
+        f"- GitOps commit SHA: `{deployment_summary.get('gitops_commit', '')}`",
+        f"- ArgoCD app/status: `{deployment_summary.get('argocd_app', '')}` / `{deployment_summary.get('argocd_sync', '')}` / `{deployment_summary.get('argocd_health', '')}`",
+        '',
+        '## APPLICATION VALIDATION',
+        '',
+        f"- Result: `{'PASS' if application_steps and all(step.status in {'PASS', 'WARN'} for step in application_steps) else 'FAIL'}`",
+        '',
+        '## OBSERVABILITY VALIDATION',
+        '',
+        f"- Result: `{'PASS' if observability_steps and all(step.status in {'PASS', 'WARN'} for step in observability_steps) else 'FAIL'}`",
+        '',
+        '## VAULT VALIDATION',
+        '',
+        f"- Result: `{'PASS' if vault_steps and all(step.status in {'PASS', 'WARN'} for step in vault_steps) else 'FAIL'}`",
+        '',
+        '## MESSAGING VALIDATION',
+        '',
+        f"- Result: `{'PASS' if messaging_steps and all(step.status in {'PASS', 'WARN'} for step in messaging_steps) else 'FAIL'}`",
+        '',
+        '## FINAL VERDICT',
+        '',
+        f'`{verdict}`',
+        '',
+    ]
+    target = docs / 'FINAL_E2E_VALIDATION_REPORT.md'
+    target.write_text('\n'.join(lines), encoding='utf-8')
+    return target
+
+
 def write_evidence_json(config, recorder: RunRecorder) -> Path:
     results: dict[str, list[dict]] = {}
     for step in recorder.steps:
@@ -508,6 +577,10 @@ def main() -> int:
     messaging_flow.run(config, recorder)
 
     with BrowserHarness(config) as browser:
+        ci_page = browser.new_page()
+        ci_security_flow.run(ci_page, config, recorder)
+        ci_page.close()
+
         deployment_page = browser.new_page()
         deployment_flow.run(deployment_page, config, recorder)
         deployment_page.close()
@@ -539,6 +612,7 @@ def main() -> int:
     recorder.add_artifact(quality_json)
     recorder.add_artifact(write_mkdocs_image_fix_report(config))
     recorder.add_artifact(write_evidence_json(config, recorder))
+    recorder.add_artifact(write_final_e2e_report(config, recorder))
     recorder.add_artifact(recorder.write_json_summary())
     recorder.add_artifact(recorder.write_screenshot_manifest())
     recorder.copy_outputs()

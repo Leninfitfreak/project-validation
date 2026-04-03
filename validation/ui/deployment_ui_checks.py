@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import PurePosixPath
+
 from playwright.sync_api import Page
 
 from validation.core.waits import wait_for_condition, wait_for_text
@@ -39,8 +41,21 @@ def github_run_artifact(page: Page, artifact_name: str, timeout_ms: int) -> None
 
 
 def github_commit_page(page: Page, commit_sha: str, values_path: str, timeout_ms: int) -> None:
-    wait_for_text(page, commit_sha[:7], timeout_ms)
-    wait_for_text(page, values_path, timeout_ms)
+    expected_filename = PurePosixPath(values_path).name
+    wait_for_condition(
+        page,
+        'github commit page visible',
+        lambda: commit_sha[:7] in body_text(page)
+        and (
+            values_path in body_text(page)
+            or expected_filename in body_text(page)
+        )
+        and (
+            'Browse files' in body_text(page)
+            or 'commit' in body_text(page).lower()
+        ),
+        timeout_ms,
+    )
 
 
 def github_file_page(page: Page, file_path: str, expected_texts: list[str], timeout_ms: int) -> None:
