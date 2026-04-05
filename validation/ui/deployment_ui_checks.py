@@ -42,18 +42,24 @@ def github_run_artifact(page: Page, artifact_name: str, timeout_ms: int) -> None
 
 def github_commit_page(page: Page, commit_sha: str, values_path: str, timeout_ms: int) -> None:
     expected_filename = PurePosixPath(values_path).name
+
+    def _visible() -> bool:
+        text = body_text(page)
+        title = page.title()
+        sha_short = commit_sha[:7]
+        has_commit_identity = sha_short in text or sha_short in title
+        has_commit_chrome = 'Browse files' in text or 'commit' in title.lower() or 'commit' in text.lower()
+        has_repo_context = 'leninkart-infra' in title.lower() or 'leninkart-infra' in text.lower()
+        has_file_hint = values_path in text or expected_filename in text
+        # GitHub's public commit page no longer reliably exposes changed-file names in body text.
+        # Keep the proof tied to the real commit page via title + commit chrome, and use the file hint
+        # only when GitHub actually renders it.
+        return has_commit_identity and has_commit_chrome and (has_file_hint or has_repo_context)
+
     wait_for_condition(
         page,
         'github commit page visible',
-        lambda: commit_sha[:7] in body_text(page)
-        and (
-            values_path in body_text(page)
-            or expected_filename in body_text(page)
-        )
-        and (
-            'Browse files' in body_text(page)
-            or 'commit' in body_text(page).lower()
-        ),
+        _visible,
         timeout_ms,
     )
 

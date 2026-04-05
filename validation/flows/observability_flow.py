@@ -223,6 +223,7 @@ def _capture_tempo(page: Page, config: ValidationConfig, recorder: RunRecorder) 
         lambda: page.locator('textarea[aria-label*="Editor content"]').count() > 0,
         long_timeout,
     )
+    product_trace_id = _tempo_recent_trace("product-service", config)
     query_box = page.locator('textarea[aria-label*="Editor content"]').first
     query_box.fill('{resource.service.name="product-service"}')
     page.keyboard.press("Shift+Enter")
@@ -235,7 +236,10 @@ def _capture_tempo(page: Page, config: ValidationConfig, recorder: RunRecorder) 
             wait_for_condition(
                 page,
                 "tempo search results visible",
-                lambda: page.get_by_text("product-service", exact=False).count() > 0,
+                lambda: (
+                    bool(product_trace_id)
+                    and product_trace_id[:8] in (page.text_content("body") or "")
+                ),
                 long_timeout,
             ),
         ),
@@ -246,7 +250,6 @@ def _capture_tempo(page: Page, config: ValidationConfig, recorder: RunRecorder) 
     )
     recorder.add_step(StepResult("OBS-012", "observability", "Tempo search results", "PASS", "Tempo search returned product-service traces", "screenshots/observability/tempo-search.png"))
 
-    product_trace_id = _tempo_recent_trace("product-service", config)
     if product_trace_id:
         query_box = page.locator('textarea[aria-label*="Editor content"]').first
         query_box.fill(product_trace_id)
