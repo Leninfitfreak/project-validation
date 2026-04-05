@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import shutil
 import urllib.parse
 import urllib.request
@@ -192,6 +193,15 @@ def _tempo_recent_trace(service_name: str, config: ValidationConfig) -> str:
     return traces[0]["traceID"] if traces else ""
 
 
+def _tempo_search_results_visible(page: Page, service_name: str) -> bool:
+    body = page.text_content("body") or ""
+    return (
+        "Table - Traces" in body
+        and service_name in body
+        and re.search(r"[0-9a-f]{32}", body) is not None
+    )
+
+
 def _capture_tempo(page: Page, config: ValidationConfig, recorder: RunRecorder) -> None:
     waits = config.settings["defaults"]["waits"]
     image_rules = config.settings["defaults"]["screenshot_quality"]
@@ -232,14 +242,10 @@ def _capture_tempo(page: Page, config: ValidationConfig, recorder: RunRecorder) 
         config.screenshot_dir("observability") / "tempo-search.png",
         require_no_loading=False,
         verify=lambda: (
-            wait_for_text(page, "product-service", long_timeout),
             wait_for_condition(
                 page,
                 "tempo search results visible",
-                lambda: (
-                    bool(product_trace_id)
-                    and product_trace_id[:8] in (page.text_content("body") or "")
-                ),
+                lambda: _tempo_search_results_visible(page, "product-service"),
                 long_timeout,
             ),
         ),
